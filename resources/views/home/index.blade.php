@@ -13,6 +13,7 @@
     <nav class="navbar">
         <img src="{{ asset('assets/logo_ums.png') }}" class="logo">
         <div class="menu">
+            <a href="{{route('repository.index')}}" class="home-link">Home</a>
             {{-- Loop through data types and their study programs --}}
             @foreach ($data as $type => $programs)
                 <div class="dropdown">

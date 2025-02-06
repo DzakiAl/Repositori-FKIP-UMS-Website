@@ -46,34 +46,47 @@ class RepositoryController extends Controller
         // Pass $data to the view
         return view('file_manager.index', compact('type', 'program', 'folders', 'files', 'data'));
     }
-    
-    public function upload_file(Request $request, $type, $program)
+
+    public function upload_file(Request $request, $type, $program, $folder = null)
     {
-        $request->validate(['file' => 'required|file']);
-    
+        $request->validate(['files' => 'required', 'files.*' => 'file']); // Validate each file
+
+        // Ensure the path includes the folder if it is set
         $path = public_path("repository/$type/$program");
-        $originalName = $request->file('file')->getClientOriginalName();
-        $fileName = $originalName;
-    
-        // Ensure unique file name
-        $counter = 1;
-        while (file_exists("$path/$fileName")) {
-            $fileName = pathinfo($originalName, PATHINFO_FILENAME) . " $counter." . $request->file('file')->getClientOriginalExtension();
-            $counter++;
+        if ($folder) {
+            $path .= "/$folder";  // If a folder is specified, append it to the path
         }
-    
-        $request->file('file')->move($path, $fileName);
-    
-        return redirect()->back()->with('success', 'File uploaded successfully.');
+
+        foreach ($request->file('files') as $file) {
+            $originalName = $file->getClientOriginalName();
+            $fileName = $originalName;
+
+            // Ensure unique file name
+            $counter = 1;
+            while (file_exists("$path/$fileName")) {
+                $fileName = pathinfo($originalName, PATHINFO_FILENAME) . " $counter." . $file->getClientOriginalExtension();
+                $counter++;
+            }
+
+            // Move file to the correct directory
+            $file->move($path, $fileName);
+        }
+
+        return redirect()->back()->with('success', 'Files uploaded successfully.');
     }
-    
-    public function add_folder(Request $request, $type, $program)
+
+    public function add_folder(Request $request, $type, $program, $folder = null)
     {
         $request->validate(['folder_name' => 'required|string']);
-    
+
+        // Ensure the path includes the folder if it is set
         $path = public_path("repository/$type/$program");
+        if ($folder) {
+            $path .= "/$folder";  // If a folder is specified, append it to the path
+        }
+
         $folderName = $request->folder_name;
-    
+
         // Ensure unique folder name
         $counter = 1;
         $uniqueFolderName = $folderName;
@@ -81,10 +94,181 @@ class RepositoryController extends Controller
             $uniqueFolderName = "$folderName $counter";
             $counter++;
         }
-    
+
+        // Create folder in the correct path
         File::makeDirectory("$path/$uniqueFolderName", 0755, true);
-    
+
         return redirect()->back()->with('success', 'Folder created successfully.');
     }
-    
+
+    public function delete_folder($type, $program, $folder)
+    {
+        $path = public_path("repository/$type/$program/$folder");
+        if (File::exists($path)) {
+            File::deleteDirectory($path);
+            return redirect()->back()->with('success', 'Folder deleted successfully.');
+        }
+        return redirect()->back()->with('error', 'Folder not found.');
+    }
+
+    public function download_file($type, $program, $file)
+    {
+        $path = public_path("repository/$type/$program/$file");
+        if (File::exists($path)) {
+            return response()->download($path);
+        }
+        return redirect()->back()->with('error', 'File not found.');
+    }
+
+    public function delete_file($type, $program, $file)
+    {
+        $path = public_path("repository/$type/$program/$file");
+        if (File::exists($path)) {
+            File::delete($path);
+            return redirect()->back()->with('success', 'File deleted successfully.');
+        }
+        return redirect()->back()->with('error', 'File not found.');
+    }
+
+    public function compress_folder($type, $program, $folder)
+    {
+        $folderPath = public_path("repository/$type/$program/$folder");
+
+        // Check if the folder is empty
+        $files = File::allFiles($folderPath);  // Get all files in the folder
+        $subfolders = File::directories($folderPath);  // Get all subfolders
+
+        // If no files and no subfolders are found, the folder is empty
+        if (count($files) === 0 && count($subfolders) === 0) {
+            return redirect()->back()->with('error', 'Cannot zip an empty folder.');
+        }
+
+        // If the folder has files or subfolders, proceed with zipping
+        $zipFileName = "$folder.zip";
+        $zipFilePath = public_path("repository/$type/$program/$zipFileName");
+
+        // Check if the zip file already exists and append a number if necessary
+        $counter = 1;
+        while (File::exists($zipFilePath)) {
+            $zipFileName = "$folder ($counter).zip";
+            $zipFilePath = public_path("repository/$type/$program/$zipFileName");
+            $counter++;
+        }
+
+        if (File::exists($folderPath)) {
+            $zip = new \ZipArchive();
+            // Try to open the zip file for writing
+            $zipOpened = $zip->open($zipFilePath, \ZipArchive::CREATE);
+
+            if ($zipOpened === true) {
+                $this->addFolderToZip($folderPath, $zip);
+                $zip->close();
+
+                return redirect()->back()->with('success', "Folder '$folder' compressed to zip.");
+            } else {
+                // If opening the zip failed, show an error
+                return redirect()->back()->with('error', 'Failed to create zip file.');
+            }
+        }
+
+        return redirect()->back()->with('error', 'Folder not found.');
+    }
+
+    private function addFolderToZip($folderPath, $zip, $parentFolder = '')
+    {
+        $files = File::files($folderPath);
+
+        foreach ($files as $file) {
+            $filePath = $file->getRealPath();
+            $zip->addFile($filePath, $parentFolder . basename($filePath));
+        }
+
+        $subfolders = File::directories($folderPath);
+        foreach ($subfolders as $folder) {
+            $this->addFolderToZip($folder, $zip, $parentFolder . basename($folder) . '/');
+        }
+    }
+
+    public function compress_file($type, $program, $file)
+    {
+        $filePath = public_path("repository/$type/$program/$file");
+        $zipFileName = "$file.zip";
+        $zipFilePath = public_path("repository/$type/$program/$zipFileName");
+
+        // Check if the zip file already exists and append a number if necessary
+        $counter = 1;
+        while (File::exists($zipFilePath)) {
+            $zipFileName = "$file ($counter).zip";
+            $zipFilePath = public_path("repository/$type/$program/$zipFileName");
+            $counter++;
+        }
+
+        if (File::exists($filePath)) {
+            $zip = new \ZipArchive();
+            if ($zip->open($zipFilePath, \ZipArchive::CREATE) === true) {
+                $zip->addFile($filePath, $file);
+                $zip->close();
+
+                return redirect()->back()->with('success', "File '$file' compressed to zip.");
+            }
+        }
+        return redirect()->back()->with('error', 'File not found.');
+    }
+
+    public function extract_zip($type, $program, $file)
+    {
+        $zipPath = public_path("repository/$type/$program/$file");
+        $extractPath = public_path("repository/$type/$program/" . pathinfo($file, PATHINFO_FILENAME));
+
+        if (!File::exists($zipPath)) {
+            return redirect()->back()->with('error', 'ZIP file not found.');
+        }
+
+        $zip = new \ZipArchive();
+        if ($zip->open($zipPath) === true) {
+            // Ensure unique extraction folder name
+            $counter = 1;
+            $uniqueExtractPath = $extractPath;
+            while (File::exists($uniqueExtractPath)) {
+                $uniqueExtractPath = $extractPath . " ($counter)";
+                $counter++;
+            }
+
+            $zip->extractTo($uniqueExtractPath);
+            $zip->close();
+
+            return redirect()->back()->with('success', 'ZIP file extracted successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Failed to extract ZIP file.');
+    }
+
+    public function open_folder($type, $program, $folder)
+    {
+        // Gather data for navbar
+        $dataTypes = array_filter(glob(public_path('repository/*')), 'is_dir');
+        $data = [];
+        foreach ($dataTypes as $typePath) {
+            $dataType = basename($typePath);
+            $studyPrograms = array_filter(glob("$typePath/*"), 'is_dir');
+            $data[$dataType] = $studyPrograms;
+        }
+
+        // Define the path to the selected folder
+        $path = public_path("repository/$type/$program/$folder");
+
+        // Get subfolders and files
+        $folders = array_filter(glob("$path/*"), 'is_dir');
+        $files = array_filter(glob("$path/*"), 'is_file');
+
+        $folders = array_map(fn($folder) => basename($folder), $folders);
+        $files = array_map(fn($file) => [
+            'name' => basename($file),
+            'url' => asset("repository/$type/$program/$folder/" . basename($file)),
+            'size' => File::size($file),
+            'modified' => date('l, d F Y', File::lastModified($file)),
+        ], $files);
+
+        return view('file_manager.index', compact('type', 'program', 'folder', 'folders', 'files', 'data'));
+    }
 }

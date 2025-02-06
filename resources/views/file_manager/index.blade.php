@@ -1,115 +1,202 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Repositori FKIP UMS | {{ $type }} - {{ $program }}</title>
-    @vite(['resources/css/file_manager.css', 'resources/js/app.js'])
-</head>
-
-<body>
-    {{-- Navbar --}}
-    @vite(['resources/css/navbar.css', 'resources/js/app.js'])
-    <nav class="navbar">
-        <img src="{{ asset('assets/logo_ums.png') }}" class="logo" alt="UMS Logo">
-        <div class="menu">
-            @foreach ($data as $dataType => $studyPrograms)
-                <div class="dropdown">
-                    <p class="dropdown-toggle">{{ $dataType }}</p>
-                    <div class="dropdown-menu">
-                        @foreach ($studyPrograms as $studyProgram)
-                            <a href="{{ route('repository.file_manager', ['type' => $dataType, 'program' => basename($studyProgram)]) }}"
-                                class="dropdown-item">
-                                {{ basename($studyProgram) }}
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </nav>
-
-    {{-- Content --}}
-    <div class="content">
-        <div class="title-container">
-            <h1 class="title">Repositori {{ $type }} Prodi {{ $program }}</h1>
-        </div>
-        <div class="file-manager-container">
-            <form action="" class="search-form">
-                <input type="text" class="search-input" name="search" placeholder="Cari file atau folder">
-                <button class="search-button">Search</button>
-            </form>
-
-            <div class="option-container">
-                {{-- Upload File Form --}}
-                <form action="{{ route('repository.upload_file', ['type' => $type, 'program' => $program]) }}" method="POST" enctype="multipart/form-data" id="upload-form" style="display: none;">
-                    @csrf
-                    <input type="file" name="file" id="file-input">
-                </form>
-                <button id="upload-button" class="upload-button">Upload File</button>
-
-                {{-- Add Folder Form --}}
-                <form action="{{ route('repository.add_folder', ['type' => $type, 'program' => $program]) }}"
-                    method="POST" style="display: flex">
-                    @csrf
-                    <input type="text" name="folder_name" id="folder_name" class="name-folder-input" placeholder="Ketik nama folder yang ingin ditambahkan">
-                    <button type="submit" class="add-folder-button">Add Folder</button>
-                </form>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Repositori FKIP UMS | {{ $type }} - {{ $program }}</title>
+        @vite(['resources/css/file_manager.css', 'resources/js/app.js'])
+    </head>
+    <body>
+        {{-- pop up --}}
+        {{-- Pop up for success or error message --}}
+        @if (session('success') || session('error'))
+            <div class="popup-container {{ session('error') ? 'error' : 'success' }}" id="popup">
+                <p class="popup">{{ session('success') ?? session('error') }}</p>
             </div>
+        @endif
 
+        {{-- Navbar --}}
+        @vite(['resources/css/navbar.css', 'resources/js/app.js'])
+        <nav class="navbar">
+            <img src="{{ asset('assets/logo_ums.png') }}" class="logo" alt="UMS Logo">
+            <div class="menu">
+                <a href="{{ route('repository.index') }}" class="home-link">Home</a>
+                @foreach ($data as $dataType => $studyPrograms)
+                    <div class="dropdown">
+                        <p class="dropdown-toggle">{{ $dataType }}</p>
+                        <div class="dropdown-menu">
+                            @foreach ($studyPrograms as $studyProgram)
+                                <a href="{{ route('repository.file_manager', ['type' => $dataType, 'program' => basename($studyProgram)]) }}"
+                                    class="dropdown-item">
+                                    {{ basename($studyProgram) }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </nav>
 
-            {{-- File and Folder List --}}
-            <table class="file-folder-list-container">
-                <thead>
-                    <tr>
-                        <th>Nama</th>
-                        <th>Terakhir Dimodifikasi</th>
-                        <th>Ukuran</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($folders as $folder)
-                        <tr class="separator-row">
-                            <td colspan="4"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>{{ $folder }}</strong></td>
-                            <td>—</td>
-                            <td>—</td>
-                        </tr>
-                        <tr class="separator-row">
-                            <td colspan="4"></td>
-                        </tr>
+        {{-- Content --}}
+        <div class="content">
+            <div class="title-container">
+                <h1 class="title">Repositori {{ $type }} Prodi {{ $program }}</h1>
+            </div>
+            <div class="file-manager-container">
+                <form action="" class="search-form">
+                    <input type="text" class="search-input" name="search" placeholder="Cari file atau folder">
+                    <button class="search-button">Search</button>
+                </form>
+
+                <div class="option-container">
+                    {{-- Upload File Form --}}
+                    <form action="{{ route('repository.upload_file', ['type' => $type, 'program' => $program, 'folder' => $folder ?? null]) }}" method="POST" enctype="multipart/form-data" id="upload-form" style="display: none;">
+                        @csrf
+                        <input type="file" name="files[]" id="file-input" multiple>
+                    </form>                    
+                    <button id="upload-button" class="upload-button">Upload</button>
+
+                    {{-- Add Folder Form --}}
+                    <form action="{{ route('repository.add_folder', ['type' => $type, 'program' => $program, 'folder' => $folder ?? null]) }}" method="POST" style="display: flex">
+                        @csrf
+                        <input type="text" name="folder_name" id="folder_name" class="name-folder-input" placeholder="Ketik nama folder yang ingin ditambahkan">
+                        <button type="submit" class="add-folder-button">Add Folder</button>
+                    </form>                    
+                </div>
+                
+                <div class="breadcrumbs">
+                    <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program]) }}">Root</a>
+                
+                    @php
+                        $folderPath = '';
+                        $folderParts = isset($folder) ? explode('/', $folder) : [];
+                    @endphp
+                
+                    @foreach ($folderParts as $index => $part)
+                        @php
+                            $folderPath .= ($index > 0 ? '/' : '') . $part;
+                        @endphp
+                
+                        / <a href="{{ route('repository.open_folder', ['type' => $type, 'program' => $program, 'folder' => $folderPath]) }}">
+                            {{ $part }}
+                        </a>
                     @endforeach
-                    @foreach ($files as $file)
-                        <tr class="separator-row">
-                            <td colspan="4"></td>
-                        </tr>
+                </div>
+
+                {{-- File and Folder List --}}
+                <table class="file-folder-list-container">
+                    <thead>
                         <tr>
-                            <td>{{ $file['name'] }}</td>
-                            <td>{{ $file['modified'] }}</td>
-                            <td>{{ number_format($file['size'] / 1024, 2) }} KB</td>
+                            <th></th>
+                            <th>Nama</th>
+                            <th>Terakhir Dimodifikasi</th>
+                            <th>Ukuran</th>
                         </tr>
-                        <tr class="separator-row">
-                            <td colspan="4"></td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($folders as $folder)
+                            <tr class="separator-row">
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td class="options">
+                                    <div class="options-container">
+                                        <span class="options-menu">⋮</span>
+                                        <div class="context-menu">
+                                            <a href="{{ route('repository.open_folder', ['type' => $type, 'program' => $program, 'folder' => $folder]) }}"> Open </a>                                        
+                                            <a href="{{ route('repository.compress_folder', ['type' => $type, 'program' => $program, 'folder' => $folder]) }}">Compress to Zip</a>
+                                            <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => $folder]) }}" onclick="return confirm('Are you sure?')">Delete</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="folder_file_name">
+                                    <img src="{{ asset('assets/folder_icon.png') }}" class="icon">
+                                    <strong>{{ $folder }}</strong>
+                                </td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr class="separator-row">
+                                <td colspan="4"></td>
+                            </tr>
+                        @endforeach
+
+                        @foreach ($files as $file)
+                            <tr class="separator-row">
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td class="options">
+                                    <div class="options-container">
+                                        <span class="options-menu">⋮</span>
+                                        <div class="context-menu">
+                                            @if (Str::endsWith($file['name'], '.zip'))
+                                                <!-- Options for ZIP files -->
+                                                <a href="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}">Download</a>
+                                                <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
+                                                <a href="{{ route('repository.extract_zip', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}">Extract</a>
+                                            @else
+                                                <!-- Options for other files -->
+                                                <a href="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}">Download</a>
+                                                <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
+                                                <a href="{{ route('repository.compress_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}">Compress to Zip</a>
+                                            @endif
+                                        </div>                                    
+                                    </div>
+                                </td>
+                                <td class="folder_file_name">
+                                    <img src="{{ asset('assets/document_icon.png') }}" class="icon">
+                                    {{ $file['name'] }}
+                                </td>
+                                <td>{{ $file['modified'] }}</td>
+                                <td>{{ number_format($file['size'] / 1024, 2) }} KB</td>
+                            </tr>
+                            <tr class="separator-row">
+                                <td colspan="4"></td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    {{-- JavaScript --}}
-    <script>
-        document.getElementById('upload-button').addEventListener('click', function() {
-            document.getElementById('file-input').click();
-        });
+        {{-- JavaScript --}}
+        <script>
+            // Upload Files
+            document.getElementById('upload-button').addEventListener('click', function() {
+                document.getElementById('file-input').click();
+            });
 
-        document.getElementById('file-input').addEventListener('change', function() {
-            document.getElementById('upload-form').submit();
-        });
-    </script>
-</body>
-</html>
+            document.getElementById('file-input').addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    document.getElementById('upload-form').submit();
+                }
+            });
+
+            // Close popup after a few seconds
+            setTimeout(() => {
+                const popup = document.getElementsByClassName('popup-container')[0];
+                if (popup) {
+                    popup.style.display = 'none';
+                }
+            }, 3000);
+
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll(".options-menu").forEach(menu => {
+                    menu.addEventListener("click", function(event) {
+                        event.stopPropagation();
+                        let dropdown = this.nextElementSibling;
+                        document.querySelectorAll(".dropdown-menu").forEach(menu => menu.style.display =
+                            "none");
+                        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+                    });
+                });
+
+                document.addEventListener("click", function() {
+                    document.querySelectorAll(".dropdown-menu").forEach(menu => menu.style.display = "none");
+                });
+            });
+        </script>
+    </body>
+    </html>
