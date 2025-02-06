@@ -47,15 +47,11 @@ class RepositoryController extends Controller
         return view('file_manager.index', compact('type', 'program', 'folders', 'files', 'data'));
     }
 
-    public function upload_file(Request $request, $type, $program, $folder = null)
+    public function upload_file(Request $request, $type, $program)
     {
         $request->validate(['files' => 'required', 'files.*' => 'file']); // Validate each file
 
-        // Ensure the path includes the folder if it is set
         $path = public_path("repository/$type/$program");
-        if ($folder) {
-            $path .= "/$folder";  // If a folder is specified, append it to the path
-        }
 
         foreach ($request->file('files') as $file) {
             $originalName = $file->getClientOriginalName();
@@ -68,23 +64,17 @@ class RepositoryController extends Controller
                 $counter++;
             }
 
-            // Move file to the correct directory
             $file->move($path, $fileName);
         }
 
         return redirect()->back()->with('success', 'Files uploaded successfully.');
     }
 
-    public function add_folder(Request $request, $type, $program, $folder = null)
+    public function add_folder(Request $request, $type, $program)
     {
         $request->validate(['folder_name' => 'required|string']);
 
-        // Ensure the path includes the folder if it is set
         $path = public_path("repository/$type/$program");
-        if ($folder) {
-            $path .= "/$folder";  // If a folder is specified, append it to the path
-        }
-
         $folderName = $request->folder_name;
 
         // Ensure unique folder name
@@ -95,7 +85,6 @@ class RepositoryController extends Controller
             $counter++;
         }
 
-        // Create folder in the correct path
         File::makeDirectory("$path/$uniqueFolderName", 0755, true);
 
         return redirect()->back()->with('success', 'Folder created successfully.');
@@ -241,34 +230,5 @@ class RepositoryController extends Controller
         }
 
         return redirect()->back()->with('error', 'Failed to extract ZIP file.');
-    }
-
-    public function open_folder($type, $program, $folder)
-    {
-        // Gather data for navbar
-        $dataTypes = array_filter(glob(public_path('repository/*')), 'is_dir');
-        $data = [];
-        foreach ($dataTypes as $typePath) {
-            $dataType = basename($typePath);
-            $studyPrograms = array_filter(glob("$typePath/*"), 'is_dir');
-            $data[$dataType] = $studyPrograms;
-        }
-
-        // Define the path to the selected folder
-        $path = public_path("repository/$type/$program/$folder");
-
-        // Get subfolders and files
-        $folders = array_filter(glob("$path/*"), 'is_dir');
-        $files = array_filter(glob("$path/*"), 'is_file');
-
-        $folders = array_map(fn($folder) => basename($folder), $folders);
-        $files = array_map(fn($file) => [
-            'name' => basename($file),
-            'url' => asset("repository/$type/$program/$folder/" . basename($file)),
-            'size' => File::size($file),
-            'modified' => date('l, d F Y', File::lastModified($file)),
-        ], $files);
-
-        return view('file_manager.index', compact('type', 'program', 'folder', 'folders', 'files', 'data'));
     }
 }
