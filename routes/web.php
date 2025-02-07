@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\RepositoryController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', [RepositoryController::class, 'index'])->name('repository.index');
 Route::get('/file-manager/{type}/{program}', [RepositoryController::class, 'file_manager'])->name('repository.file_manager');
@@ -13,4 +15,10 @@ Route::get('/delete-file/{type}/{program}/{file}', [RepositoryController::class,
 Route::get('/compress-folder/{type}/{program}/{folder}', [RepositoryController::class, 'compress_folder'])->name('repository.compress_folder');
 Route::get('/compress-file/{type}/{program}/{file}', [RepositoryController::class, 'compress_file'])->name('repository.compress_file');
 Route::get('/extract-zip/{type}/{program}/{file}', [RepositoryController::class, 'extract_zip'])->name('repository.extract_zip');
-Route::get('/dashboard', [RepositoryController::class, 'dashboard'])->name('dashboard');
+Route::get('/login', [AuthController::class, 'ShowLoginForm'])->name('show_login_form');
+Route::post('/login', [AuthController::class, 'Login'])->name('login');
+Route::post('/logout', [AuthController::class, 'Logout'])->name('logout');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+});

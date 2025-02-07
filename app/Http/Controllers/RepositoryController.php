@@ -238,9 +238,4 @@ class RepositoryController extends Controller
 
         return redirect()->back()->with('error', 'Failed to extract ZIP file.');
     }
-
-    public function dashboard ()
-    {
-        return view ('dashboard.index');
-    }
 }
