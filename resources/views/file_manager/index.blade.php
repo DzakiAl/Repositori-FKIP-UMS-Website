@@ -46,10 +46,10 @@
             <h1 class="title">Repositori {{ $type }} Prodi {{ $program }}</h1>
         </div>
         <div class="file-manager-container">
-            <form action="" class="search-form">
-                <input type="text" class="search-input" name="search" placeholder="Cari file atau folder">
-                <button class="search-button">Search</button>
-            </form>
+            <form action="{{ route('repository.file_manager', ['type' => $type, 'program' => $program]) }}" method="GET" class="search-form">
+                <input type="text" class="search-input" name="search" placeholder="Cari file atau folder" value="{{ request('search') }}">
+                <button type="submit" class="search-button">Search</button>
+            </form>            
 
             <div class="option-container">
                 {{-- Upload File Form --}}

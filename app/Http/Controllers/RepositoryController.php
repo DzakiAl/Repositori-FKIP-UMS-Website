@@ -19,7 +19,7 @@ class RepositoryController extends Controller
         return view('home.index', compact('data'));
     }
 
-    public function file_manager($type, $program)
+    public function file_manager(Request $request, $type, $program)
     {
         // Gather data for the navbar
         $dataTypes = array_filter(glob(public_path('repository/*')), 'is_dir');
@@ -32,19 +32,26 @@ class RepositoryController extends Controller
 
         // List files and folders for the selected study program
         $path = public_path("repository/$type/$program");
+        $search = $request->query('search'); // Get search query
+
         $folders = array_filter(glob("$path/*"), 'is_dir');
         $files = array_filter(glob("$path/*"), 'is_file');
 
+        // Apply search filter if a search term is entered
+        if ($search) {
+            $folders = array_filter($folders, fn($folder) => stripos(basename($folder), $search) !== false);
+            $files = array_filter($files, fn($file) => stripos(basename($file), $search) !== false);
+        }
+
         $folders = array_map(fn($folder) => basename($folder), $folders);
-        $files = array_map(fn($file) => [
+        $files = array_map(fn($file): array => [
             'name' => basename($file),
             'url' => asset("repository/$type/$program/" . basename($file)),
             'size' => File::size($file),
             'modified' => date('l, d F Y', File::lastModified($file)),
         ], $files);
 
-        // Pass $data to the view
-        return view('file_manager.index', compact('type', 'program', 'folders', 'files', 'data'));
+        return view('file_manager.index', compact('type', 'program', 'folders', 'files', 'data', 'search'));
     }
 
     public function upload_file(Request $request, $type, $program)
@@ -230,5 +237,10 @@ class RepositoryController extends Controller
         }
 
         return redirect()->back()->with('error', 'Failed to extract ZIP file.');
+    }
+
+    public function dashboard ()
+    {
+        return view ('dashboard.index');
     }
 }

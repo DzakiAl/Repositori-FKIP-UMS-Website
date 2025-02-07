@@ -13,3 +13,4 @@ Route::get('/delete-file/{type}/{program}/{file}', [RepositoryController::class,
 Route::get('/compress-folder/{type}/{program}/{folder}', [RepositoryController::class, 'compress_folder'])->name('repository.compress_folder');
 Route::get('/compress-file/{type}/{program}/{file}', [RepositoryController::class, 'compress_file'])->name('repository.compress_file');
 Route::get('/extract-zip/{type}/{program}/{file}', [RepositoryController::class, 'extract_zip'])->name('repository.extract_zip');
+Route::get('/dashboard', [RepositoryController::class, 'dashboard'])->name('dashboard');
