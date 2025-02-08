@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('password');
-            $table->string('password_file_folder');
             $table->rememberToken();
             $table->timestamps();
         });

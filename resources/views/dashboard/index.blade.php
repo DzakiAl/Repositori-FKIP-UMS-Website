@@ -43,32 +43,41 @@
     {{-- content --}}
     <div class="content">
         <div class="form-container">
-            {{-- form for change username --}}
-            <form action="" class="form">
+            {{-- Form for changing username --}}
+            <form action="{{ route('update.username') }}" method="POST" class="form">
+                @csrf
                 <p class="label">Username:</p>
-                <input type="text" class="input" name="username" placeholder="Masukkan username">
-                <button class="button">Simpan</button>
+                <input type="text" class="input" name="username" value="{{ auth()->user()->name }}" required>
+                <button type="submit" class="button">Simpan</button>
             </form>
 
-            {{-- form for change password --}}
-            <form action="" class="form">
+            {{-- Form for changing password --}}
+            <form action="{{ route('update.password') }}" method="POST" class="form">
+                @csrf
                 <p class="label">Password Baru:</p>
-                <input type="password" class="input" name="new_password" placeholder="Masukkan pasword baru">
+                <input type="password" class="input" name="new_password" required placeholder="Masukkan Password Baru">
+                
                 <p class="label">Password Lama:</p>
-                <input type="password" class="input" name="old_password" placeholder="Masukkan password lama">
+                <input type="password" class="input" name="old_password" required placeholder="Masukkan Password Lama">
+
                 <p class="label">Konfirmasi Password:</p>
-                <input type="password" class="input" name="confirm_password" placeholder="Masukkan password baru lagi untuk konfirmasi">
-                <button class="button">Simpan</button>
+                <input type="password" class="input" name="new_password_confirmation" required placeholder="Masukkan Password Baru Lagi Untuk Konfirmasi">
+                
+                <button type="submit" class="button">Simpan</button>
             </form>
 
             {{-- form for change file and folder password --}}
-            <form action="" class="form">
-                <p class="label">Passowrd File dan Folder Baru:</p>
-                <input type="password" class="input" name="new_password_file_folder" placeholder="Masukkan password file dan folder baru">
-                <p class="label">Password File dan Folder Lama</p>
-                <input type="password" class="input" name="old_password_file_folder" placeholder="Masukkan password file dan folder lama">
+            <form action="{{ route('update_download_password') }}" method="POST" class="form">
+                @csrf
+                <p class="label">Password File dan Folder Baru:</p>
+                <input type="password" class="input" name="new_password_file_folder" placeholder="Masukkan password file dan folder baru" required>
+            
+                <p class="label">Password File dan Folder Lama:</p>
+                <input type="password" class="input" name="old_password_file_folder" placeholder="Masukkan password file dan folder lama" required>
+            
                 <p class="label">Konfirmasi Password File dan Folder:</p>
-                <input type="password" class="input" name="confirm_password_file_folder" placeholder="Masukkan password file dan folder yang baru lagi untuk konfirmasi">
+                <input type="password" class="input" name="confirm_password_file_folder" placeholder="Masukkan password file dan folder yang baru lagi untuk konfirmasi" required>
+            
                 <button class="button">Simpan</button>
             </form>
 

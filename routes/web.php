@@ -3,6 +3,7 @@
 use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', [RepositoryController::class, 'index'])->name('repository.index');
 Route::get('/file-manager/{type}/{program}', [RepositoryController::class, 'file_manager'])->name('repository.file_manager');
@@ -21,4 +22,7 @@ Route::post('/logout', [AuthController::class, 'Logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::post('/update-username', [UserController::class, 'updateUsername'])->name('update.username');
+    Route::post('/update-password', [UserController::class, 'updatePassword'])->name('update.password');
+    Route::post('/update-download-password', [UserController::class, 'updateDownloadPassword'])->name('update_download_password');
 });
