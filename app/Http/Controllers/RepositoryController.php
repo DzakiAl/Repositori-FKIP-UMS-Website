@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class RepositoryController extends Controller
 {
@@ -27,32 +29,41 @@ class RepositoryController extends Controller
         foreach ($dataTypes as $typePath) {
             $dataType = basename($typePath);
             $studyPrograms = array_filter(glob("$typePath/*"), 'is_dir');
-            $data[$dataType] = $studyPrograms;
+            $data[$dataType] = array_map('basename', $studyPrograms); // Ensure only folder names
         }
+
+        // Ensure correct values for $type and $program
+        $type = basename($type);
+        $program = basename($program);
 
         // List files and folders for the selected study program
         $path = public_path("repository/$type/$program");
-        $search = $request->query('search'); // Get search query
-
         $folders = array_filter(glob("$path/*"), 'is_dir');
         $files = array_filter(glob("$path/*"), 'is_file');
 
-        // Apply search filter if a search term is entered
-        if ($search) {
-            $folders = array_filter($folders, fn($folder) => stripos(basename($folder), $search) !== false);
-            $files = array_filter($files, fn($file) => stripos(basename($file), $search) !== false);
-        }
-
         $folders = array_map(fn($folder) => basename($folder), $folders);
-        $files = array_map(fn($file): array => [
+        $files = array_map(fn($file) => [
             'name' => basename($file),
             'url' => asset("repository/$type/$program/" . basename($file)),
             'size' => File::size($file),
             'modified' => date('l, d F Y', File::lastModified($file)),
         ], $files);
 
-        return view('file_manager.index', compact('type', 'program', 'folders', 'files', 'data', 'search'));
+        // Implement search functionality
+        $searchQuery = $request->input('search');
+        if ($searchQuery) {
+            $folders = array_filter($folders, function ($folder) use ($searchQuery) {
+                return strpos(strtolower($folder), strtolower($searchQuery)) !== false;
+            });
+
+            $files = array_filter($files, function ($file) use ($searchQuery) {
+                return strpos(strtolower($file['name']), strtolower($searchQuery)) !== false;
+            });
+        }
+
+        return view('file_manager.index', compact('type', 'program', 'folders', 'files', 'data'));
     }
+
 
     public function upload_file(Request $request, $type, $program)
     {
@@ -107,12 +118,22 @@ class RepositoryController extends Controller
         return redirect()->back()->with('error', 'Folder not found.');
     }
 
-    public function download_file($type, $program, $file)
+    public function download_file(Request $request, $type, $program, $file)
     {
+        // Get the password from the database
+        $password = DB::table('password_file_downloads')->value('download_password');
+
+        // Check if a password is provided in the request
+        if (!Hash::check($request->password, $password)) {
+            return redirect()->back()->with('error', 'Incorrect password. Please try again.');
+        }
+
+        // If the password is correct, proceed with the download
         $path = public_path("repository/$type/$program/$file");
         if (File::exists($path)) {
             return response()->download($path);
         }
+
         return redirect()->back()->with('error', 'File not found.');
     }
 

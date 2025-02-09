@@ -4,60 +4,179 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.content {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Desktop screen */
+@media screen and (min-width: 1024px) {
+    .content {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .title {
+        text-align: center;
+        color: #2F3185;
+    }
+    
+    .form {
+        width: 50%;
+        margin: 0 0 15px 0;
+    }
+    
+    .label {
+        font-size: 15px;
+        margin: 0 0 5px 0;
+    }
+    
+    .input {
+        width: 100%;
+        margin: 0 0 5px 0;
+        font-size: 15px;
+        background-color: transparent;
+        border: none;
+        border-bottom: 2.5px solid #2F3185;
+    }
+    
+    .error {
+        color: red;
+        margin: 0 0 5px 0;
+    }
+    
+    .option {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .button {
+        background-color: #FFB800;
+        color: #2F3185;
+        padding: 10px 50px 10px 50px;
+        font-size: 15px;
+        border: none;
+        transition: all ease-in-out 0.25s;
+        margin: 5px 0 5px 0;
+    }
+    
+    .button:hover {
+        background-color: #ce9402;
+        color: #2F3185;
+        cursor: pointer;
+    }
 }
 
-.title {
-    text-align: center;
-    color: #2F3185;
+/* tablet screen */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .content {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .title {
+        text-align: center;
+        color: #2F3185;
+    }
+    
+    .form {
+        width: 60%;
+        margin: 0 0 15px 0;
+    }
+    
+    .label {
+        font-size: 15px;
+        margin: 0 0 5px 0;
+    }
+    
+    .input {
+        width: 100%;
+        margin: 0 0 5px 0;
+        font-size: 15px;
+        background-color: transparent;
+        border: none;
+        border-bottom: 2.5px solid #2F3185;
+    }
+    
+    .error {
+        color: red;
+        margin: 0 0 5px 0;
+    }
+    
+    .option {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .button {
+        background-color: #FFB800;
+        color: #2F3185;
+        padding: 10px 50px 10px 50px;
+        font-size: 15px;
+        border: none;
+        transition: all ease-in-out 0.25s;
+        margin: 5px 0 5px 0;
+    }
+    
+    .button:hover {
+        background-color: #ce9402;
+        color: #2F3185;
+        cursor: pointer;
+    }
 }
 
-.form {
-    width: 50%;
-    margin: 0 0 15px 0;
-}
-
-.label {
-    font-size: 15px;
-    margin: 0 0 5px 0;
-}
-
-.input {
-    width: 100%;
-    margin: 0 0 5px 0;
-    font-size: 15px;
-    background-color: transparent;
-    border: none;
-    border-bottom: 2.5px solid #2F3185;
-}
-
-.error {
-    color: red;
-    margin: 0 0 5px 0;
-}
-
-.option {
-    display: flex;
-    justify-content: center;
-}
-
-.button {
-    background-color: #FFB800;
-    color: #2F3185;
-    padding: 10px 50px 10px 50px;
-    font-size: 15px;
-    border: none;
-    transition: all ease-in-out 0.25s;
-    margin: 5px 0 5px 0;
-}
-
-.button:hover {
-    background-color: #ce9402;
-    color: #2F3185;
-    cursor: pointer;
+/* phone screen */
+@media screen and (max-width: 767px) {
+    .content {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .title {
+        text-align: center;
+        color: #2F3185;
+    }
+    
+    .form {
+        width: 80%;
+        margin: 0 0 15px 0;
+    }
+    
+    .label {
+        font-size: 15px;
+        margin: 0 0 5px 0;
+    }
+    
+    .input {
+        width: 100%;
+        margin: 0 0 5px 0;
+        font-size: 15px;
+        background-color: transparent;
+        border: none;
+        border-bottom: 2.5px solid #2F3185;
+    }
+    
+    .error {
+        color: red;
+        margin: 0 0 5px 0;
+    }
+    
+    .option {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .button {
+        background-color: #FFB800;
+        color: #2F3185;
+        padding: 10px 50px 10px 50px;
+        font-size: 15px;
+        border: none;
+        transition: all ease-in-out 0.25s;
+        margin: 5px 0 5px 0;
+    }
 }

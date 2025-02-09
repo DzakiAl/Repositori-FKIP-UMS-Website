@@ -34,7 +34,29 @@
                 </div>
             @endforeach
         </div>
+        <div class="hamburger-container" onclick="toggleSidebar()">
+            <div class="hamburger"></div>
+            <div class="hamburger"></div>
+            <div class="hamburger"></div>
+        </div>
     </nav>
+
+    {{-- Sidebar --}}
+    <div class="sidebar" id="sidebar">
+        <a href="{{route('repository.index')}}" class="home-link">Home</a>
+        @foreach ($data as $dataType => $studyPrograms)
+            <div class="sidebar-dropdown">
+                <p class="sidebar-toggle">{{ $dataType }}</p>
+                <div class="sidebar-dropdown-menu">
+                    @foreach ($studyPrograms as $studyProgram)
+                            <a href="{{ route('repository.file_manager', ['type' => $dataType, 'program' => basename($studyProgram)]) }}" class="dropdown-item">
+                                {{ basename($studyProgram) }}
+                            </a>
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
+    </div>
 
     {{-- Content --}}
     <div class="content">
@@ -120,7 +142,7 @@
                                     <div class="context-menu">
                                         @if (Str::endsWith($file['name'], '.zip'))
                                             <!-- Options for ZIP files -->
-                                            <a href="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}">Download</a>
+                                            <a href="#" class="download-file">Download</a>
                                             @auth
                                                 <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
                                                 <a aria-autocomplete=""href="{{ route('repository.extract_zip', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}">Extract</a>
@@ -128,10 +150,22 @@
                                         @else
                                             <!-- Options for other files -->
                                             <a href="">Open</a>
-                                            <a href="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}">Download</a>
+                                            <a href="#" class="download-file">Download</a>
+                                            <div id="passwordModal" class="modal-overlay">
+                                                <div class="modal-content">
+                                                    <h3 class="modal-title">Enter Password to Download</h3>
+                                                    <form action="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}" method="GET">
+                                                        <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
+                                                        <div class="modal-option">
+                                                            <button class="modal-button" type="submit">Download</button>
+                                                            <button type="button" class="modal-close-button" onclick="closeModal()">Close</button> <!-- Close button -->
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                             @auth
                                                 <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
-                                                <a href="{{ route('repository.compress_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}">Compressto Zip</a>
+                                                <a href="{{ route('repository.compress_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}">Compress to Zip</a>
                                             @endauth
                                         @endif
                                     </div>
@@ -212,6 +246,52 @@
 
             document.addEventListener("click", function() {
                 document.querySelectorAll(".dropdown-menu").forEach(menu => menu.style.display = "none");
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.download-file').forEach(function (button) {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Find the closest modal related to this button
+                    let modal = this.closest('tr').querySelector('.modal-overlay');
+                    if (modal) {
+                        modal.style.display = 'flex';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.modal-close-button').forEach(function (closeButton) {
+                closeButton.addEventListener('click', function () {
+                    let modal = this.closest('.modal-overlay');
+                    if (modal) {
+                        modal.style.display = 'none';
+                        modal.querySelector('.modal-input').value = ''; // Clear input field
+                    }
+                });
+            });
+
+            window.addEventListener('click', function (e) {
+                document.querySelectorAll('.modal-overlay').forEach(function (modal) {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                        modal.querySelector('.modal-input').value = ''; // Clear input field
+                    }
+                });
+            });
+        });
+
+        // Toggle sidebar
+            function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Toggle dropdowns in sidebar
+        document.querySelectorAll('.sidebar-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                let dropdownMenu = toggle.nextElementSibling;
+                dropdownMenu.classList.toggle('show');
             });
         });
     </script>

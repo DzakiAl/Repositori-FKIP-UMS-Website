@@ -34,7 +34,29 @@
                 </div>
             @endforeach
         </div>
+        <div class="hamburger-container" onclick="toggleSidebar()">
+            <div class="hamburger"></div>
+            <div class="hamburger"></div>
+            <div class="hamburger"></div>
+        </div>
     </nav>
+
+    {{-- Sidebar --}}
+    <div class="sidebar" id="sidebar">
+        <a href="{{route('repository.index')}}" class="home-link">Home</a>
+        @foreach ($data as $type => $programs)
+            <div class="sidebar-dropdown">
+                <p class="sidebar-toggle">{{ $type }}</p>
+                <div class="sidebar-dropdown-menu">
+                    @foreach ($programs as $program)
+                        <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => basename($program)]) }}" class="sidebar-item">
+                            {{ basename($program) }}
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
+    </div>
 
     <div class="title-container">
         <h1 class="title">Dashboard</h1>
@@ -102,6 +124,35 @@
                 popup.style.display = 'none';
             }
         }, 3000);
+
+        // Toggle sidebar
+            function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Toggle dropdowns in sidebar
+        document.querySelectorAll('.sidebar-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                let dropdownMenu = toggle.nextElementSibling;
+                dropdownMenu.classList.toggle('show');
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".options-menu").forEach(menu => {
+                menu.addEventListener("click", function(event) {
+                    event.stopPropagation();
+                    let dropdown = this.nextElementSibling;
+                    document.querySelectorAll(".dropdown-menu").forEach(menu => menu.style.display =
+                        "none");
+                    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+                });
+            });
+
+            document.addEventListener("click", function() {
+                document.querySelectorAll(".dropdown-menu").forEach(menu => menu.style.display = "none");
+            });
+        });
     </script>
 </body>
 </html>
