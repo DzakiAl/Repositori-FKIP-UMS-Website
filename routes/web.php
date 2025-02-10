@@ -6,7 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 
 Route::get('/', [RepositoryController::class, 'index'])->name('repository.index');
-Route::get('/file-manager/{type}/{program}', [RepositoryController::class, 'file_manager'])->name('repository.file_manager');
+Route::get('/file-manager/{type}/{program}/{subfolder?}', [RepositoryController::class, 'file_manager'])->where('subfolder', '.*')->name('repository.file_manager');
 Route::post('/upload-file/{type}/{program}', [RepositoryController::class, 'upload_file'])->name('repository.upload_file');
 Route::post('/add-folder/{type}/{program}', [RepositoryController::class, 'add_folder'])->name('repository.add_folder');
 Route::get('/delete-folder/{type}/{program}/{folder}', [RepositoryController::class, 'delete_folder'])->name('repository.delete_folder');

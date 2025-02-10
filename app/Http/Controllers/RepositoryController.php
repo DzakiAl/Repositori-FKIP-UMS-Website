@@ -21,7 +21,7 @@ class RepositoryController extends Controller
         return view('home.index', compact('data'));
     }
 
-    public function file_manager(Request $request, $type, $program)
+    public function file_manager(Request $request, $type, $program, $subfolder = null)
     {
         // Gather data for the navbar
         $dataTypes = array_filter(glob(public_path('repository/*')), 'is_dir');
@@ -29,41 +29,41 @@ class RepositoryController extends Controller
         foreach ($dataTypes as $typePath) {
             $dataType = basename($typePath);
             $studyPrograms = array_filter(glob("$typePath/*"), 'is_dir');
-            $data[$dataType] = array_map('basename', $studyPrograms); // Ensure only folder names
+            $data[$dataType] = array_map('basename', $studyPrograms);
         }
 
         // Ensure correct values for $type and $program
         $type = basename($type);
         $program = basename($program);
 
-        // List files and folders for the selected study program
-        $path = public_path("repository/$type/$program");
+        // Build folder path dynamically
+        $path = public_path("repository/$type/$program" . ($subfolder ? "/$subfolder" : ''));
+
+        // Get folders & files
         $folders = array_filter(glob("$path/*"), 'is_dir');
         $files = array_filter(glob("$path/*"), 'is_file');
 
+        // Format data
         $folders = array_map(fn($folder) => basename($folder), $folders);
         $files = array_map(fn($file) => [
             'name' => basename($file),
-            'url' => asset("repository/$type/$program/" . basename($file)),
+            'url' => asset("repository/$type/$program" . ($subfolder ? "/$subfolder" : '') . "/" . basename($file)),
             'size' => File::size($file),
             'modified' => date('l, d F Y', File::lastModified($file)),
         ], $files);
 
-        // Implement search functionality
+        // Implement search
         $searchQuery = $request->input('search');
         if ($searchQuery) {
-            $folders = array_filter($folders, function ($folder) use ($searchQuery) {
-                return strpos(strtolower($folder), strtolower($searchQuery)) !== false;
-            });
-
-            $files = array_filter($files, function ($file) use ($searchQuery) {
-                return strpos(strtolower($file['name']), strtolower($searchQuery)) !== false;
-            });
+            $folders = array_filter($folders, fn($folder) => strpos(strtolower($folder), strtolower($searchQuery)) !== false);
+            $files = array_filter($files, fn($file) => strpos(strtolower($file['name']), strtolower($searchQuery)) !== false);
         }
 
-        return view('file_manager.index', compact('type', 'program', 'folders', 'files', 'data'));
-    }
+        // Breadcrumb navigation
+        $breadcrumbs = explode('/', trim($subfolder, '/'));
 
+        return view('file_manager.index', compact('type', 'program', 'folders', 'files', 'data', 'subfolder', 'breadcrumbs'));
+    }
 
     public function upload_file(Request $request, $type, $program)
     {

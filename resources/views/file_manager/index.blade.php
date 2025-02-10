@@ -107,12 +107,14 @@
                                 <div class="options-container">
                                     <span class="options-menu">⋮</span>
                                     <div class="context-menu">
-                                        <a href="">Open</a>
-                                        <a href="{{ route('repository.compress_folder', ['type' => $type, 'program' => $program, 'folder' => $folder]) }}">
+                                        <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">
+                                            Open
+                                        </a>
+                                        <a href="{{ route('repository.compress_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">
                                             Compress to Zip
                                         </a>
                                         @auth
-                                            <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => $folder]) }}" onclick="return confirm('Are you sure?')">
+                                            <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure?')">
                                                 Delete
                                             </a>
                                         @endauth
