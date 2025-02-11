@@ -72,20 +72,27 @@
             @auth
                 <div class="file-manager-option-container">
                     {{-- Upload File Form --}}
-                    <form action="{{ route('repository.upload_file', ['type' => $type, 'program' => $program]) }}" method="POST" enctype="multipart/form-data" id="upload-form" style="display: none;">
-                        @csrf
-                        <input type="file" name="files[]" id="file-input" multiple>
-                    </form>
+                    <form action="{{ route('repository.upload_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="POST" enctype="multipart/form-data" id="upload-form" style="display: none;">
+                      @csrf
+                      <input type="file" name="files[]" id="file-input" multiple>
+                    </form>                  
                     <button id="upload-button" class="upload-button">Upload</button>
 
                     {{-- Add Folder Form --}}
-                    <form action="{{ route('repository.add_folder', ['type' => $type, 'program' => $program]) }}" method="POST" style="display: flex">
+                    <form action="{{ route('repository.add_folder', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="POST" style="display: flex">
                         @csrf
                         <input type="text" name="folder_name" id="folder_name" class="name-folder-input" placeholder="Ketik nama folder yang ingin ditambahkan">
                         <button type="submit" class="add-folder-button">Add Folder</button>
-                    </form>
+                    </form>                  
                 </div>
             @endauth
+            
+            <div class="breadcrumbs">
+                <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program]) }}">Root</a>
+                @foreach ($breadcrumbs as $index => $crumb)
+                    / <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => implode('/', array_slice($breadcrumbs, 0, $index + 1))]) }}">{{ $crumb }}</a>
+                @endforeach
+            </div>
 
             {{-- File and Folder List --}}
             <table class="file-folder-list-container">

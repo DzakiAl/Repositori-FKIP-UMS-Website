@@ -271,6 +271,10 @@ body {
         color: rgb(184, 184, 184);
         cursor: pointer;
     }
+
+    .breadcrumbs {
+        margin: 5px 0 5px 0;
+    }
 }
 
 /* tablet screen */
@@ -506,6 +510,10 @@ body {
         height: 30px;
         transition: all ease-in-out 0.25s;
     }
+
+    .breadcrumbs {
+        margin: 5px 0 5px 0;
+    }
 }
 
 /* phone screen */
@@ -740,5 +748,9 @@ body {
         width: 100px;
         height: 30px;
         transition: all ease-in-out 0.25s;
+    }
+
+    .breadcrumbs {
+        margin: 5px 0 5px 0;
     }
 }

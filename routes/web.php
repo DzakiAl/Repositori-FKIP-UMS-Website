@@ -7,8 +7,8 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', [RepositoryController::class, 'index'])->name('repository.index');
 Route::get('/file-manager/{type}/{program}/{subfolder?}', [RepositoryController::class, 'file_manager'])->where('subfolder', '.*')->name('repository.file_manager');
-Route::post('/upload-file/{type}/{program}', [RepositoryController::class, 'upload_file'])->name('repository.upload_file');
-Route::post('/add-folder/{type}/{program}', [RepositoryController::class, 'add_folder'])->name('repository.add_folder');
+Route::post('/upload-file/{type}/{program}/{subfolder?}', [RepositoryController::class, 'upload_file'])->where('subfolder', '.*')->name('repository.upload_file');
+Route::post('/add-folder/{type}/{program}/{subfolder?}', [RepositoryController::class, 'add_folder'])->where('subfolder', '.*')->name('repository.add_folder');
 Route::get('/delete-folder/{type}/{program}/{folder}', [RepositoryController::class, 'delete_folder'])->name('repository.delete_folder');
 Route::get('/download-file/{type}/{program}/{file}', [RepositoryController::class, 'download_file'])->name('repository.download_file');
 Route::get('/delete-file/{type}/{program}/{file}', [RepositoryController::class, 'delete_file'])->name('repository.delete_file');

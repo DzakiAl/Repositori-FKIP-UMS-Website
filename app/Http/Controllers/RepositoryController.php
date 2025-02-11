@@ -65,11 +65,17 @@ class RepositoryController extends Controller
         return view('file_manager.index', compact('type', 'program', 'folders', 'files', 'data', 'subfolder', 'breadcrumbs'));
     }
 
-    public function upload_file(Request $request, $type, $program)
+    public function upload_file(Request $request, $type, $program, $subfolder = null)
     {
-        $request->validate(['files' => 'required', 'files.*' => 'file']); // Validate each file
+        $request->validate(['files' => 'required', 'files.*' => 'file']);
 
-        $path = public_path("repository/$type/$program");
+        // Build the correct path dynamically, including subfolder if provided
+        $path = public_path("repository/$type/$program" . ($subfolder ? "/$subfolder" : ''));
+
+        // Ensure the directory exists
+        if (!File::exists($path)) {
+            File::makeDirectory($path, 0755, true);
+        }
 
         foreach ($request->file('files') as $file) {
             $originalName = $file->getClientOriginalName();
@@ -88,11 +94,13 @@ class RepositoryController extends Controller
         return redirect()->back()->with('success', 'Files uploaded successfully.');
     }
 
-    public function add_folder(Request $request, $type, $program)
+    public function add_folder(Request $request, $type, $program, $subfolder = null)
     {
         $request->validate(['folder_name' => 'required|string']);
 
-        $path = public_path("repository/$type/$program");
+        // Build the correct path dynamically, including subfolder if provided
+        $path = public_path("repository/$type/$program" . ($subfolder ? "/$subfolder" : ''));
+
         $folderName = $request->folder_name;
 
         // Ensure unique folder name
