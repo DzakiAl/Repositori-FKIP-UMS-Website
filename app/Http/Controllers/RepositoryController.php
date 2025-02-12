@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use ZipArchive;
+use RecursiveIteratorIterator; 
+use RecursiveDirectoryIterator; 
+use Illuminate\Support\Facades\Log;
 
 class RepositoryController extends Controller
 {
@@ -159,134 +161,18 @@ class RepositoryController extends Controller
         return redirect()->back()->with('error', 'File not found.');
     }
 
-    public function compress_folder($type, $program, $folder, $subfolder = null)
+    public function compress_file ()
     {
-        $folderPath = public_path("repository/$type/$program/$folder" . ($subfolder ? "/$subfolder" : ''));
 
-        // Check if the folder is empty
-        $files = File::allFiles($folderPath);  // Get all files in the folder
-        $subfolders = File::directories($folderPath);  // Get all subfolders
-
-        // If no files and no subfolders are found, the folder is empty
-        if (count($files) === 0 && count($subfolders) === 0) {
-            return redirect()->back()->with('error', 'Cannot zip an empty folder.');
-        }
-
-        // If the folder has files or subfolders, proceed with zipping
-        $zipFileName = "$folder.zip";
-        $zipFilePath = public_path("repository/$type/$program/$zipFileName" . ($subfolder ? "/$subfolder" : ''));
-
-        // Check if the zip file already exists and append a number if necessary
-        $counter = 1;
-        while (File::exists($zipFilePath)) {
-            $zipFileName = "$folder ($counter).zip";
-            $zipFilePath = public_path("repository/$type/$program/$zipFileName" . ($subfolder ? "/$subfolder" : ''));
-            $counter++;
-        }
-
-        if (File::exists($folderPath)) {
-            $zip = new \ZipArchive();
-            // Try to open the zip file for writing
-            $zipOpened = $zip->open($zipFilePath, \ZipArchive::CREATE);
-
-            if ($zipOpened === true) {
-                $this->addFolderToZip($folderPath, $zip);
-                $zip->close();
-
-                return redirect()->back()->with('success', "Folder '$folder' compressed to zip.");
-            } else {
-                // If opening the zip failed, show an error
-                return redirect()->back()->with('error', 'Failed to create zip file.');
-            }
-        }
-
-        return redirect()->back()->with('error', 'Folder not found.');
     }
 
-    private function addFolderToZip($folderPath, $zip, $parentFolder = '')
+    public function compress_folder ()
     {
-        $files = File::files($folderPath);
-
-        foreach ($files as $file) {
-            $filePath = $file->getRealPath();
-            $zip->addFile($filePath, $parentFolder . basename($filePath));
-        }
-
-        $subfolders = File::directories($folderPath);
-        foreach ($subfolders as $folder) {
-            $this->addFolderToZip($folder, $zip, $parentFolder . basename($folder) . '/');
-        }
+        
     }
 
-    public function compress_file($type, $program, $file, $subfolder = null)
+    public function extract_zip()
     {
-        // Construct the file path correctly
-        $basePath = public_path("repository/$type/$program");
-        if ($subfolder) {
-            $basePath .= "/$subfolder";
-        }
-
-        $filePath = $basePath . "/$file";
-
-        // Debugging Logs
-        Log::info("Base Path: $basePath");
-        Log::info("File: $file");
-        Log::info("Constructed File Path: $filePath");
-
-        // Ensure file exists
-        if (!File::exists($filePath)) {
-            Log::error("File not found: $filePath");
-            return redirect()->back()->with('error', "File '$file' not found.");
-        }
-
-        // Create a zip filename based on the original file name
-        $zipFileName = pathinfo($file, PATHINFO_FILENAME) . ".zip";
-        $zipFilePath = $basePath . "/$zipFileName";
-
-        // Avoid overwriting existing ZIPs by appending a number
-        $counter = 1;
-        while (File::exists($zipFilePath)) {
-            $zipFileName = pathinfo($file, PATHINFO_FILENAME) . " ($counter).zip";
-            $zipFilePath = $basePath . "/$zipFileName";
-            $counter++;
-        }
-
-        // Create ZIP and add file
-        $zip = new ZipArchive();
-        if ($zip->open($zipFilePath, ZipArchive::CREATE) === true) {
-            $zip->addFile($filePath, basename($file));
-            $zip->close();
-            return redirect()->back()->with('success', "File '$file' compressed to zip.");
-        }
-
-        return redirect()->back()->with('error', 'Failed to create zip file.');
-    }
-
-    public function extract_zip($type, $program, $file, $subfolder = null)
-    {
-        $zipPath = public_path("repository/$type/$program/$file" . ($subfolder ? "/$subfolder" : ''));
-        $extractPath = public_path("repository/$type/$program/" . pathinfo($file, PATHINFO_FILENAME));
-
-        if (!File::exists($zipPath)) {
-            return redirect()->back()->with('error', 'ZIP file not found.');
-        }
-
-        $zip = new \ZipArchive();
-        if ($zip->open($zipPath) === true) {
-            // Ensure unique extraction folder name
-            $counter = 1;
-            $uniqueExtractPath = $extractPath;
-            while (File::exists($uniqueExtractPath)) {
-                $uniqueExtractPath = $extractPath . " ($counter)";
-                $counter++;
-            }
-
-            $zip->extractTo($uniqueExtractPath);
-            $zip->close();
-
-            return redirect()->back()->with('success', 'ZIP file extracted successfully.');
-        }
-
-        return redirect()->back()->with('error', 'Failed to extract ZIP file.');
+        
     }
 }

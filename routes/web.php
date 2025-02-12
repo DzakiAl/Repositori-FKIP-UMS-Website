@@ -12,9 +12,6 @@ Route::post('/add-folder/{type}/{program}/{subfolder?}', [RepositoryController::
 Route::get('/delete-folder/{type}/{program}/{subfolder?}/{folder}', [RepositoryController::class, 'delete_folder'])->where('subfolder', '.*')->name('repository.delete_folder');
 Route::get('/download-file/{type}/{program}/{subfolder?}/{file}', [RepositoryController::class, 'download_file'])->where('subfolder', '.*')->name('repository.download_file');
 Route::get('/delete-file/{type}/{program}/{subfolder?}/{file}', [RepositoryController::class, 'delete_file'])->where('subfolder', '.*')->name('repository.delete_file');
-Route::get('/compress-folder/{type}/{program}/{subfolder?}/{folder}', [RepositoryController::class, 'compress_folder'])->where('subfolder', '.*')->name('repository.compress_folder'); //error
-Route::get('/compress-file/{type}/{program}/{subfolder?}/{file}', [RepositoryController::class, 'compress_file'])->where('subfolder', '.*')->name('repository.compress_file'); //error
-Route::get('/extract-zip/{type}/{program}/{subfolder?}/{file}', [RepositoryController::class, 'extract_zip'])->where('subfolder', '.*')->name('repository.extract_zip'); //error
 Route::get('/login', [AuthController::class, 'ShowLoginForm'])->name('show_login_form');
 Route::post('/login', [AuthController::class, 'Login'])->name('login');
 Route::post('/logout', [AuthController::class, 'Logout'])->name('logout');

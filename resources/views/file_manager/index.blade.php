@@ -118,7 +118,7 @@
                                             Open
                                         </a>
                                         @auth
-                                            <a href="{{ route('repository.compress_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">
+                                            <a href="">
                                                 Compress to Zip
                                             </a>
                                             <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure?')">
@@ -166,7 +166,7 @@
                                             </div>
                                             @auth
                                                 <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
-                                                <a aria-autocomplete=""href="{{ route('repository.extract_zip', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}">Extract</a>
+                                                <a href="">Extract</a>
                                             @endauth
                                         @else
                                             <!-- Options for other files -->
@@ -186,7 +186,7 @@
                                             </div>
                                             @auth
                                                 <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
-                                                <a href="{{ route('repository.compress_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}">Compress to Zip</a>
+                                                <a href="">Compress to Zip</a>
                                             @endauth
                                         @endif
                                     </div>
