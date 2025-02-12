@@ -117,10 +117,10 @@
                                         <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">
                                             Open
                                         </a>
-                                        <a href="{{ route('repository.compress_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">
-                                            Compress to Zip
-                                        </a>
                                         @auth
+                                            <a href="{{ route('repository.compress_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">
+                                                Compress to Zip
+                                            </a>
                                             <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure?')">
                                                 Delete
                                             </a>
@@ -152,18 +152,10 @@
                                         @if (Str::endsWith($file['name'], '.zip'))
                                             <!-- Options for ZIP files -->
                                             <a href="#" class="download-file">Download</a>
-                                            @auth
-                                                <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
-                                                <a aria-autocomplete=""href="{{ route('repository.extract_zip', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}">Extract</a>
-                                            @endauth
-                                        @else
-                                            <!-- Options for other files -->
-                                            <a href="">Open</a>
-                                            <a href="#" class="download-file">Download</a>
                                             <div id="passwordModal" class="modal-overlay">
                                                 <div class="modal-content">
                                                     <h3 class="modal-title">Enter Password to Download</h3>
-                                                    <form action="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}" method="GET">
+                                                    <form action="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" method="GET">
                                                         <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
                                                         <div class="modal-option">
                                                             <button class="modal-button" type="submit">Download</button>
@@ -173,8 +165,28 @@
                                                 </div>
                                             </div>
                                             @auth
-                                                <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
-                                                <a href="{{ route('repository.compress_file', ['type' => $type, 'program' => $program, 'file' => $file['name']]) }}">Compress to Zip</a>
+                                                <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
+                                                <a aria-autocomplete=""href="{{ route('repository.extract_zip', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}">Extract</a>
+                                            @endauth
+                                        @else
+                                            <!-- Options for other files -->
+                                            <a href="">Open</a>
+                                            <a href="#" class="download-file">Download</a>
+                                            <div id="passwordModal" class="modal-overlay">
+                                                <div class="modal-content">
+                                                    <h3 class="modal-title">Enter Password to Download</h3>
+                                                    <form action="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" method="GET">
+                                                        <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
+                                                        <div class="modal-option">
+                                                            <button class="modal-button" type="submit">Download</button>
+                                                            <button type="button" class="modal-close-button" onclick="closeModal()">Close</button> <!-- Close button -->
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            @auth
+                                                <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
+                                                <a href="{{ route('repository.compress_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}">Compress to Zip</a>
                                             @endauth
                                         @endif
                                     </div>
