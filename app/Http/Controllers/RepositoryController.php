@@ -160,19 +160,4 @@ class RepositoryController extends Controller
         }
         return redirect()->back()->with('error', 'File not found.');
     }
-
-    public function compress_file ()
-    {
-
-    }
-
-    public function compress_folder ()
-    {
-        
-    }
-
-    public function extract_zip()
-    {
-        
-    }
 }

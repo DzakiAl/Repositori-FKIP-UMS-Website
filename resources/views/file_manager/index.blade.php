@@ -114,16 +114,9 @@
                                 <div class="options-container">
                                     <span class="options-menu">⋮</span>
                                     <div class="context-menu">
-                                        <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">
-                                            Open
-                                        </a>
+                                        <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">Open</a>
                                         @auth
-                                            <a href="">
-                                                Compress to Zip
-                                            </a>
-                                            <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure?')">
-                                                Delete
-                                            </a>
+                                            <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure?')">Delete</a>
                                         @endauth
                                     </div>
                                 </div>
@@ -166,7 +159,6 @@
                                             </div>
                                             @auth
                                                 <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
-                                                <a href="">Extract</a>
                                             @endauth
                                         @else
                                             <!-- Options for other files -->
