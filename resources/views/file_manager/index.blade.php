@@ -142,45 +142,20 @@
                                 <div class="options-container">
                                     <span class="options-menu">⋮</span>
                                     <div class="context-menu">
-                                        @if (Str::endsWith($file['name'], '.zip'))
-                                            <!-- Options for ZIP files -->
-                                            <a href="#" class="download-file">Download</a>
-                                            <div id="passwordModal" class="modal-overlay">
-                                                <div class="modal-content">
-                                                    <h3 class="modal-title">Enter Password to Download</h3>
-                                                    <form action="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" method="GET">
-                                                        <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
-                                                        <div class="modal-option">
-                                                            <button class="modal-button" type="submit">Download</button>
-                                                            <button type="button" class="modal-close-button" onclick="closeModal()">Close</button> <!-- Close button -->
-                                                        </div>
-                                                    </form>
-                                                </div>
+                                        <a href="">Open</a>
+                                        <a href="#" class="download-file">Download</a>
+                                        <div id="passwordModal" class="modal-overlay">
+                                            <div class="modal-content">
+                                                <h3 class="modal-title">Enter Password to Download</h3>
+                                                <form action="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" method="GET">
+                                                    <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
+                                                    <div class="modal-option">
+                                                        <button class="modal-button" type="submit">Download</button>
+                                                        <button type="button" class="modal-close-button" onclick="closeModal()">Close</button> <!-- Close button -->
+                                                    </div>
+                                                </form>
                                             </div>
-                                            @auth
-                                                <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
-                                            @endauth
-                                        @else
-                                            <!-- Options for other files -->
-                                            <a href="">Open</a>
-                                            <a href="#" class="download-file">Download</a>
-                                            <div id="passwordModal" class="modal-overlay">
-                                                <div class="modal-content">
-                                                    <h3 class="modal-title">Enter Password to Download</h3>
-                                                    <form action="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" method="GET">
-                                                        <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
-                                                        <div class="modal-option">
-                                                            <button class="modal-button" type="submit">Download</button>
-                                                            <button type="button" class="modal-close-button" onclick="closeModal()">Close</button> <!-- Close button -->
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            @auth
-                                                <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
-                                                <a href="">Compress to Zip</a>
-                                            @endauth
-                                        @endif
+                                        </div>
                                     </div>
                                 </div>
                             </td>
