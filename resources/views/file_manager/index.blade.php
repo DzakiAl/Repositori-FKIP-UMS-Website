@@ -142,7 +142,6 @@
                                 <div class="options-container">
                                     <span class="options-menu">⋮</span>
                                     <div class="context-menu">
-                                        <!-- Options for other files -->
                                         <a href="">Open</a>
                                         <a href="#" class="download-file">Download</a>
                                         <div id="passwordModal" class="modal-overlay">
@@ -152,7 +151,7 @@
                                                     <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
                                                     <div class="modal-option">
                                                         <button class="modal-button" type="submit">Download</button>
-                                                        <button type="button" class="modal-close-button" onclick="closeModal()">Close</button> <!-- Close button -->
+                                                        <button type="button" class="modal-close-button" onclick="closeModal()">Close</button>
                                                     </div>
                                                 </form>
                                             </div>
