@@ -142,6 +142,7 @@
                                 <div class="options-container">
                                     <span class="options-menu">⋮</span>
                                     <div class="context-menu">
+                                        <!-- Options for other files -->
                                         <a href="">Open</a>
                                         <a href="#" class="download-file">Download</a>
                                         <div id="passwordModal" class="modal-overlay">
@@ -156,6 +157,9 @@
                                                 </form>
                                             </div>
                                         </div>
+                                        @auth
+                                            <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
+                                        @endauth
                                     </div>
                                 </div>
                             </td>
