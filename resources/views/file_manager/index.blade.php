@@ -198,6 +198,7 @@
             }
         });
 
+        // Upload JS function
         document.addEventListener("DOMContentLoaded", function() {
             let uploadButton = document.getElementById('upload-button');
             let fileInput = document.getElementById('file-input');
@@ -224,6 +225,7 @@
             }
         }, 3000);
 
+        // Option JS function for file and folder
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll(".options-menu").forEach(menu => {
                 menu.addEventListener("click", function(event) {
@@ -240,6 +242,7 @@
             });
         });
 
+        // Download JS function for showing enter password to download modal
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll('.download-file').forEach(function (button) {
                 button.addEventListener('click', function (e) {
@@ -253,6 +256,7 @@
                 });
             });
 
+            // Download JS function when close modal clear password field
             document.querySelectorAll('.modal-close-button').forEach(function (closeButton) {
                 closeButton.addEventListener('click', function () {
                     let modal = this.closest('.modal-overlay');
