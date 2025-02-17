@@ -142,7 +142,7 @@
                                 <div class="options-container">
                                     <span class="options-menu">⋮</span>
                                     <div class="context-menu">
-                                        <a href="">Open</a>
+                                        <a href="{{ route('repository.open_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}">Open</a>
                                         <a href="#" class="download-file">Download</a>
                                         <div id="passwordModal" class="modal-overlay">
                                             <div class="modal-content">

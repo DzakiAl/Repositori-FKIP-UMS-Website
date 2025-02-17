@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use ZipArchive;
-use RecursiveIteratorIterator; 
-use RecursiveDirectoryIterator; 
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 use Illuminate\Support\Facades\Log;
 
 class RepositoryController extends Controller
@@ -159,5 +159,52 @@ class RepositoryController extends Controller
             return redirect()->back()->with('success', 'File deleted successfully.');
         }
         return redirect()->back()->with('error', 'File not found.');
+    }
+
+    public function open_file($type, $program, $file, $subfolder = null)
+    {
+        $path = public_path("repository/$type/$program/$file" . ($subfolder ? "/$subfolder" : ''));
+
+        if (File::exists($path)) {
+            // Get the file's mime type to determine how to display it
+            $mimeType = mime_content_type($path);
+
+            // For PDF files
+            if ($mimeType == 'application/pdf') {
+                return response()->file($path);
+            }
+
+            // For Word files (doc, docx)
+            if ($mimeType == 'application/msword' || $mimeType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                return $this->openWithGoogleDocsViewer($path);
+            }
+
+            // For Excel files (xls, xlsx)
+            if ($mimeType == 'application/vnd.ms-excel' || $mimeType == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                return $this->openWithGoogleDocsViewer($path);
+            }
+
+            // For PowerPoint files (ppt, pptx)
+            if ($mimeType == 'application/vnd.ms-powerpoint' || $mimeType == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+                return $this->openWithGoogleDocsViewer($path);
+            }
+
+            // For image files (jpeg, png, gif, etc.)
+            if (in_array($mimeType, ['image/jpeg', 'image/png', 'image/gif', 'image/webp'])) {
+                return response()->file($path);
+            }
+
+            // Default case for other file types
+            return response()->file($path);
+        }
+
+        return redirect()->back()->with('error', 'File not found.');
+    }
+
+    private function openWithGoogleDocsViewer($filePath)
+    {
+        // URL for Google Docs Viewer
+        $url = 'https://docs.google.com/viewer?url=' . urlencode(asset('repository/' . $filePath));
+        return redirect()->away($url);
     }
 }
