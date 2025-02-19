@@ -76,7 +76,7 @@
                       @csrf
                       <input type="file" name="files[]" id="file-input" multiple>
                     </form>                  
-                    <button id="upload-button" class="upload-button">Upload</button>
+                    <button id="upload-button" class="upload-button">Upload File</button>
 
                     {{-- Add Folder Form --}}
                     <form action="{{ route('repository.add_folder', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="POST" style="display: flex">
@@ -115,6 +115,20 @@
                                     <span class="options-menu">⋮</span>
                                     <div class="context-menu">
                                         <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">Open</a>
+                                        <a href="#" class="download-file">Download</a>
+                                        <div id="passwordModal" class="modal-overlay">
+                                            <div class="modal-content">
+                                                <h3 class="modal-title">Enter Password to Download</h3>
+                                                <form action="{{ route('repository.download_folder', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" method="POST">
+                                                    @csrf
+                                                    <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
+                                                    <div class="modal-option">
+                                                        <button class="modal-button" type="submit">Download</button>
+                                                        <button type="button" class="modal-close-button" onclick="closeModal()">Close</button>
+                                                    </div>
+                                                </form>                                                
+                                            </div>
+                                        </div>
                                         @auth
                                             <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure?')">Delete</a>
                                         @endauth
