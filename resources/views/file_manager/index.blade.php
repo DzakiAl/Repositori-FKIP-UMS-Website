@@ -73,8 +73,8 @@
                 <div class="file-manager-option-container">
                     {{-- Upload File Form --}}
                     <form action="{{ route('repository.upload_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="POST" enctype="multipart/form-data" id="upload-form" style="display: none;">
-                      @csrf
-                      <input type="file" name="files[]" id="file-input" multiple>
+                        @csrf
+                        <input type="file" name="files[]" id="file-input" multiple>
                     </form>                  
                     <button id="upload-button" class="upload-button">Upload File</button>
 
@@ -207,25 +207,6 @@
                 fileInput.addEventListener('change', function() {
                     if (this.files.length > 0) {
                         document.getElementById('upload-form').submit();
-                    }
-                });
-            }
-        });
-
-        // Upload JS function
-        document.addEventListener("DOMContentLoaded", function() {
-            let uploadButton = document.getElementById('upload-button');
-            let fileInput = document.getElementById('file-input');
-            let uploadForm = document.getElementById('upload-form');
-
-            if (uploadButton && fileInput && uploadForm) {
-                uploadButton.addEventListener('click', function() {
-                    fileInput.click();
-                });
-
-                fileInput.addEventListener('change', function() {
-                    if (this.files.length > 0) {
-                        uploadForm.submit();
                     }
                 });
             }
