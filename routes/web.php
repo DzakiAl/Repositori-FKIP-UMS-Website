@@ -17,6 +17,7 @@ Route::get('/open-file/{type}/{program}/{subfolder?}/{file}', [RepositoryControl
 Route::get('/login', [AuthController::class, 'ShowLoginForm'])->name('show_login_form');
 Route::post('/login', [AuthController::class, 'Login'])->name('login');
 Route::post('/logout', [AuthController::class, 'Logout'])->name('logout');
+Route::post('/rename/{type}/{program}/{subfolder?}', [RepositoryController::class, 'rename'])->where('subfolder', '.*')->name('repository.rename');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');

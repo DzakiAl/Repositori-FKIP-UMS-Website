@@ -130,6 +130,7 @@
                                             </div>
                                         </div>
                                         @auth
+                                            <a href="#" onclick="renameItem('{{ $folder }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
                                             <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure?')">Delete</a>
                                         @endauth
                                     </div>
@@ -171,6 +172,7 @@
                                             </div>
                                         </div>
                                         @auth
+                                            <a href="#" onclick="renameItem('{{ $file['name'] }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
                                             <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
                                         @endauth
                                     </div>
@@ -284,6 +286,37 @@
                 dropdownMenu.classList.toggle('show');
             });
         });
+
+        function renameItem(oldName, renameUrl) {
+            const newName = prompt("Enter the new name:", oldName);
+            if (newName && newName !== oldName) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = renameUrl;
+
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = '_token';
+                csrfToken.value = '{{ csrf_token() }}';
+
+                const oldNameInput = document.createElement('input');
+                oldNameInput.type = 'hidden';
+                oldNameInput.name = 'old_name';
+                oldNameInput.value = oldName;
+
+                const newNameInput = document.createElement('input');
+                newNameInput.type = 'hidden';
+                newNameInput.name = 'new_name';
+                newNameInput.value = newName;
+
+                form.appendChild(csrfToken);
+                form.appendChild(oldNameInput);
+                form.appendChild(newNameInput);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
     </script>
 </body>
 </html>

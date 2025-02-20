@@ -207,7 +207,7 @@ class RepositoryController extends Controller
         $url = 'https://docs.google.com/viewer?url=' . urlencode(asset('repository/' . $filePath));
         return redirect()->away($url);
     }
-    
+
     public function download_folder(Request $request, $type, $program, $subfolder = null)
     {
         // Get the password from the database
@@ -266,5 +266,29 @@ class RepositoryController extends Controller
 
         // Download the ZIP file
         return response()->download($zipFilePath)->deleteFileAfterSend(true);
+    }
+
+    public function rename(Request $request, $type, $program, $subfolder = null)
+    {
+        $request->validate([
+            'old_name' => 'required|string',
+            'new_name' => 'required|string'
+        ]);
+
+        $basePath = public_path("repository/$type/$program" . ($subfolder ? "/$subfolder" : ''));
+        $oldPath = "$basePath/{$request->old_name}";
+        $newPath = "$basePath/{$request->new_name}";
+
+        if (!File::exists($oldPath)) {
+            return redirect()->back()->with('error', 'File or folder not found.');
+        }
+
+        if (File::exists($newPath)) {
+            return redirect()->back()->with('error', 'A file or folder with this name already exists.');
+        }
+
+        File::move($oldPath, $newPath);
+
+        return redirect()->back()->with('success', 'Renamed successfully.');
     }
 }
