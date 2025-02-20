@@ -78,6 +78,13 @@
                     </form>                  
                     <button id="upload-button" class="upload-button">Upload File</button>
 
+                    {{-- Upload Folder Form --}}
+                    <form action="{{ route('repository.upload_folder', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="POST" enctype="multipart/form-data" id="upload-form">
+                        @csrf
+                        <input type="file" name="files[]" id="folder-input" webkitdirectory multiple style="display: none;">
+                    </form>                   
+                    <button id="upload-folder-button" class="upload-button">Upload Folder</button>
+
                     {{-- Add Folder Form --}}
                     <form action="{{ route('repository.add_folder', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="POST" style="display: flex">
                         @csrf
@@ -287,6 +294,7 @@
             });
         });
 
+        // Rename folder and file logic
         function renameItem(oldName, renameUrl) {
             const newName = prompt("Enter the new name:", oldName);
             if (newName && newName !== oldName) {
@@ -317,6 +325,38 @@
                 form.submit();
             }
         }
+
+        // Upload folder button
+        document.getElementById('upload-folder-button').addEventListener('click', function() {
+            document.getElementById('folder-input').click();
+        });
+
+        // Upload folder logic
+        document.getElementById('folder-input').addEventListener('change', function(event) {
+            let formData = new FormData();
+            
+            for (let file of event.target.files) {
+                formData.append('files[]', file);
+                formData.append('paths[]', file.webkitRelativePath); // Send full relative path
+            }
+
+            fetch("{{ route('repository.upload_folder', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                }
+            }).then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error); // Show error if folder exists
+                } else {
+                    alert(data.message);
+                    location.reload();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
     </script>
 </body>
 </html>

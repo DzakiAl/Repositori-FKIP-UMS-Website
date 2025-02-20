@@ -75,12 +75,11 @@ body {
         display: flex;
         align-items: center;
         height: 30px;
-        gap: 10px;
     }
     
     .name-folder-input {
         width: 250px;
-        margin-right: 10px;
+        margin-right: 5px;
     }
     
     .upload-button {
@@ -88,6 +87,7 @@ body {
         width: 130px;
         height: 30px;
         font-size: 15px;
+        margin-right: 5px;
         background-color: #FFB800;
         color: #2F3185;
         text-decoration: none;
@@ -341,12 +341,11 @@ body {
         display: flex;
         align-items: center;
         height: 30px;
-        gap: 10px;
     }
     
     .name-folder-input {
         width: 250px;
-        margin-right: 10px;
+        margin-right: 5px;
     }
     
     .upload-button {
@@ -354,6 +353,7 @@ body {
         width: 130px;
         height: 30px;
         font-size: 15px;
+        margin-right: 5px;
         background-color: #FFB800;
         color: #2F3185;
         text-decoration: none;
@@ -581,19 +581,19 @@ body {
         display: flex;
         align-items: center;
         height: 30px;
-        gap: 5px;
     }
     
     .name-folder-input {
-        width: 150px;
+        width: 100px;
         margin-right: 5px;
     }
     
     .upload-button {
         display: block;
-        width: 70px;
+        width: 80px;
         height: 25px;
-        font-size: 15px;
+        font-size: 10px;
+        margin-right: 5px;
         background-color: #FFB800;
         color: #2F3185;
         text-decoration: none;
@@ -605,10 +605,10 @@ body {
     
     .add-folder-button {
         display: block;
-        width: 100px;
+        width: 70px;
         height: 25px;
         line-height: 25px;
-        font-size: 15px;
+        font-size: 10px;
         background-color: #FFB800;
         color: #2F3185;
         text-decoration: none;

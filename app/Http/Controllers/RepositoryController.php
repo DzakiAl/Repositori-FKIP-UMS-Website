@@ -291,4 +291,45 @@ class RepositoryController extends Controller
 
         return redirect()->back()->with('success', 'Renamed successfully.');
     }
+
+    public function upload_folder(Request $request, $type, $program, $subfolder = null)
+    {
+        $basePath = public_path("repository/$type/$program" . ($subfolder ? "/$subfolder" : ''));
+
+        if (!File::exists($basePath)) {
+            File::makeDirectory($basePath, 0755, true);
+        }
+
+        if ($request->has('paths')) {
+            // Get the top-level folder name from the first uploaded file
+            $firstPath = explode('/', $request->paths[0])[0];
+            $folderPath = $basePath . '/' . $firstPath;
+
+            // Check if the folder already exists
+            if (File::exists($folderPath)) {
+                return response()->json(['error' => "Folder '$firstPath' already exists!"], 400);
+            }
+
+            foreach ($request->paths as $index => $relativePath) {
+                $file = $request->file('files')[$index];
+
+                // Extract folder structure
+                $filePath = $basePath . '/' . $relativePath;
+                $fileDir = dirname($filePath);
+
+                // Create directory if it doesn't exist
+                if (!File::exists($fileDir)) {
+                    File::makeDirectory($fileDir, 0755, true, true);
+                }
+
+                // Save the file
+                if ($file) {
+                    $file->move($fileDir, basename($filePath));
+                }
+            }
+        }
+
+        return response()->json(['message' => 'Folder uploaded successfully.']);
+    }
+
 }
