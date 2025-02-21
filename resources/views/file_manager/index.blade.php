@@ -105,10 +105,10 @@
             <table class="file-folder-list-container">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>Nama</th>
                         <th>Terakhir Dimodifikasi</th>
                         <th>Ukuran</th>
+                        <th>Option</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -116,39 +116,35 @@
                         <tr class="separator-row">
                             <td colspan="4"></td>
                         </tr>
-                        <tr>
-                            <td class="options">
-                                <div class="options-container">
-                                    <span class="options-menu">⋮</span>
-                                    <div class="context-menu">
-                                        <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">Open</a>
-                                        <a href="#" class="download-file">Download</a>
-                                        <div id="passwordModal" class="modal-overlay">
-                                            <div class="modal-content">
-                                                <h3 class="modal-title">Enter Password to Download</h3>
-                                                <form action="{{ route('repository.download_folder', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" method="POST">
-                                                    @csrf
-                                                    <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
-                                                    <div class="modal-option">
-                                                        <button class="modal-button" type="submit">Download</button>
-                                                        <button type="button" class="modal-close-button" onclick="closeModal()">Close</button>
-                                                    </div>
-                                                </form>                                                
-                                            </div>
-                                        </div>
-                                        @auth
-                                            <a href="#" onclick="renameItem('{{ $folder }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
-                                            <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure?')">Delete</a>
-                                        @endauth
-                                    </div>
-                                </div>
-                            </td>
+                        <tr class="folder_file_container">
                             <td class="folder_file_name">
                                 <img src="{{ asset('assets/folder_icon.png') }}" class="icon">
-                                <strong>{{ $folder }}</strong>
+                                <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">
+                                    {{ $folder }}
+                                </a>
                             </td>
                             <td>—</td>
                             <td>—</td>
+                            <td class="options">
+                                <a href="#" class="download-file">Download</a>
+                                <div id="passwordModal" class="modal-overlay">
+                                    <div class="modal-content">
+                                        <h3 class="modal-title">Enter Password to Download</h3>
+                                            <form action="{{ route('repository.download_folder', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" method="POST">
+                                                @csrf
+                                                <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
+                                                <div class="modal-option">
+                                                    <button class="modal-button" type="submit">Download</button>
+                                                    <button type="button" class="modal-close-button" onclick="closeModal()">Close</button>
+                                                </div>
+                                            </form>                                                
+                                        </div>
+                                    </div>
+                                @auth
+                                    <a href="#" onclick="renameItem('{{ $folder }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
+                                    <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure?')">Delete</a>
+                                @endauth
+                            </td>
                         </tr>
                         <tr class="separator-row">
                             <td colspan="4"></td>
@@ -160,36 +156,33 @@
                             <td colspan="4"></td>
                         </tr>
                         <tr>
-                            <td class="options">
-                                <div class="options-container">
-                                    <span class="options-menu">⋮</span>
-                                    <div class="context-menu">
-                                        <a href="{{ route('repository.open_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}">Open</a>
-                                        <a href="#" class="download-file">Download</a>
-                                        <div id="passwordModal" class="modal-overlay">
-                                            <div class="modal-content">
-                                                <h3 class="modal-title">Enter Password to Download</h3>
-                                                <form action="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" method="GET">
-                                                    <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
-                                                    <div class="modal-option">
-                                                        <button class="modal-button" type="submit">Download</button>
-                                                        <button type="button" class="modal-close-button" onclick="closeModal()">Close</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        @auth
-                                            <a href="#" onclick="renameItem('{{ $file['name'] }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
-                                            <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure?')">Delete</a>
-                                        @endauth
-                                    </div>
-                                </div>
-                            </td>
                             <td class="folder_file_name">
-                                <img src="{{ asset('assets/document_icon.png') }}" class="icon"> {{ $file['name'] }}
+                                <img src="{{ asset('assets/document_icon.png') }}" class="icon">
+                                <a class="file_folder_name" href="{{ route('repository.open_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" target="_blank">
+                                    {{ $file['name'] }}
+                                </a>
                             </td>
                             <td>{{ $file['modified'] }}</td>
                             <td>{{ number_format($file['size'] / 1024, 2) }} KB</td>
+                            <td class="options">
+                                <a href="#" class="download-file">Download</a>
+                                    <div id="passwordModal" class="modal-overlay">
+                                        <div class="modal-content">
+                                            <h3 class="modal-title">Enter Password to Download</h3>
+                                            <form action="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" method="GET">
+                                                <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
+                                                <div class="modal-option">
+                                                    <button class="modal-button" type="submit">Download</button>
+                                                    <button type="button" class="modal-close-button" onclick="closeModal()">Close</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @auth
+                                    <a href="#" onclick="renameItem('{{ $file['name'] }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
+                                    <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure? (This is action cannot be undone')">Delete</a>
+                                @endauth
+                            </td>
                         </tr>
                         <tr class="separator-row">
                             <td colspan="4"></td>
