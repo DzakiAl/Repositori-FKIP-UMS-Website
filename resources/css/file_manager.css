@@ -291,7 +291,7 @@ body {
     }
     
     .name-folder-input {
-        width: 100px;
+        width: 175px;
         margin-right: 5px;
     }
     
@@ -456,7 +456,7 @@ body {
     }
     
     .file-manager-container {
-        margin: 10px;
+        margin: 5px;
     }
     
     .search-form {
@@ -472,9 +472,9 @@ body {
     }
     
     .search-button {
-        width: 90px;
+        width: 80px;
         height: 25px;
-        font-size: 12.5px;
+        font-size: 10px;
         border: none;
         background-color: #FFB800;
         color: #2F3185;
@@ -530,7 +530,7 @@ body {
     .file-folder-list-container tr th {
         text-align: left;
         font-weight: normal;
-        font-size: 15px;
+        font-size: 12.5px;
     }
     
     .separator-row td {
@@ -540,7 +540,11 @@ body {
     .folder_file_name {
         display: flex;
         align-items: center;
-        font-size: 15px;
+        font-size: 12.5px;
+    }
+
+    .file-folder-list-container tr td {
+        font-size: 12.5px;
     }
     
     .icon {
@@ -552,9 +556,9 @@ body {
     .info-file-folder {
         font-size: 15px;
     }
-    
+
     .options {
-        width: 50px;
+        font-size: 12.5px;
     }
     
     .modal-overlay {

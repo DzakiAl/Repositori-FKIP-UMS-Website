@@ -23,7 +23,7 @@
             <a href="{{ route('repository.index') }}" class="home-link">Home</a>
             @foreach ($data as $dataType => $studyPrograms)
                 <div class="dropdown">
-                    <p class="dropdown-toggle">{{ $dataType }}</p>
+                    <a class="dropdown-toggle">{{ $dataType }}</a>
                     <div class="dropdown-menu">
                         @foreach ($studyPrograms as $studyProgram)
                             <a href="{{ route('repository.file_manager', ['type' => $dataType, 'program' => basename($studyProgram)]) }}" class="dropdown-item">
@@ -142,7 +142,7 @@
                                     </div>
                                 @auth
                                     <a href="#" onclick="renameItem('{{ $folder }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
-                                    <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure?')">Delete</a>
+                                    <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure? (This is action cannot be undone)')">Delete</a>
                                 @endauth
                             </td>
                         </tr>
@@ -180,7 +180,7 @@
                                     </div>
                                 @auth
                                     <a href="#" onclick="renameItem('{{ $file['name'] }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
-                                    <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure? (This is action cannot be undone')">Delete</a>
+                                    <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure? (This is action cannot be undone)')">Delete</a>
                                 @endauth
                             </td>
                         </tr>
@@ -221,23 +221,6 @@
                 popup.style.display = 'none';
             }
         }, 3000);
-
-        // Option JS function for file and folder
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".options-menu").forEach(menu => {
-                menu.addEventListener("click", function(event) {
-                    event.stopPropagation();
-                    let dropdown = this.nextElementSibling;
-                    document.querySelectorAll(".dropdown-menu").forEach(menu => menu.style.display =
-                        "none");
-                    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-                });
-            });
-
-            document.addEventListener("click", function() {
-                document.querySelectorAll(".dropdown-menu").forEach(menu => menu.style.display = "none");
-            });
-        });
 
         // Download JS function for showing enter password to download modal
         document.addEventListener("DOMContentLoaded", function () {
