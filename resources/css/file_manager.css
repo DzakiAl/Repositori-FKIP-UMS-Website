@@ -103,6 +103,7 @@ body {
         height: 30px;
         line-height: 30px;
         font-size: 15px;
+        margin-right: 5px;
         background-color: #FFB800;
         color: #2F3185;
         text-decoration: none;
@@ -289,7 +290,25 @@ body {
         background-color: rgb(185, 2, 2);
         color: rgb(184, 184, 184);
         cursor: pointer;
-    }    
+    }
+
+    .download-all-file-folder-button {
+        width: 200px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 15px;
+        text-align: center;
+        text-decoration: none;
+        background-color: #FFB800;
+        color: #2F3185;
+        transition: all ease-in-out 0.25s;
+    }
+
+    .download-all-file-folder-button:hover {
+        background-color: #ce9402;
+        color: #141665;
+        transition: all ease-in-out 0.25s;
+    }
 }
 
 /* tablet screen */
