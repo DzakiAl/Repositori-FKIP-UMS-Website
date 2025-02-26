@@ -158,9 +158,20 @@
                         <tr>
                             <td class="folder_file_name">
                                 <img src="{{ asset('assets/document_icon.png') }}" class="icon">
-                                <a class="file_folder_name" href="{{ route('repository.open_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" target="_blank">
+                                <a href="#" class="file-folder-name" onclick="showFilePasswordModal('{{ route('repository.open_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}')">
                                     {{ $file['name'] }}
                                 </a>
+                                
+                                <div id="filePasswordModal" class="file-modal-overlay">
+                                    <div class="file-modal-content">
+                                        <h3 class="file-modal-title">Enter Password to View File</h3>
+                                        <input id="filePasswordInput" class="file-modal-input" type="password" required placeholder="Enter file password">
+                                        <div class="file-modal-option">
+                                            <button class="file-modal-button" onclick="submitFilePassword()">View File</button>
+                                            <button type="button" class="file-modal-close-button" onclick="closeFileModal()">Close</button>
+                                        </div>
+                                    </div>
+                                </div>                                                             
                             </td>
                             <td>{{ $file['modified'] }}</td>
                             <td>{{ number_format($file['size'] / 1024, 2) }} KB</td>
@@ -333,6 +344,44 @@
             })
             .catch(error => console.error('Error:', error));
         });
+
+        // Insert password first to view file JS function
+        function showFilePasswordModal(fileUrl) {
+            window.fileUrl = fileUrl; // Store file URL for later use
+            document.getElementById('filePasswordModal').style.display = 'flex';
+        }
+
+        function closeFileModal() {
+            let modal = document.getElementById('filePasswordModal');
+            let passwordInput = document.getElementById('filePasswordInput');
+
+            // Hide the modal
+            modal.style.display = "none";
+
+            // Clear the password field
+            passwordInput.value = "";
+        }
+
+        function submitFilePassword() {
+            let passwordInput = document.getElementById('filePasswordInput');
+            let password = passwordInput.value.trim();
+
+            if (password === "") {
+                alert("Please enter a password");
+                return;
+            }
+            
+            let url = window.fileUrl + "?password=" + encodeURIComponent(password);
+            
+            // Open the file in a new tab
+            window.open(url, '_blank');
+
+            // Clear the password field
+            passwordInput.value = "";
+
+            // Close the modal
+            closeFileModal();
+        }
     </script>
 </body>
 </html>

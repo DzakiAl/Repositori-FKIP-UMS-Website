@@ -161,9 +161,21 @@ class RepositoryController extends Controller
         return redirect()->back()->with('error', 'File not found.');
     }
 
-    public function open_file($type, $program, $file, $subfolder = null)
+    public function open_file(Request $request, $type, $program, $file, $subfolder = null)
     {
         $path = public_path("repository/$type/$program/$file" . ($subfolder ? "/$subfolder" : ''));
+
+        if (!File::exists($path)) {
+            return redirect()->back()->with('error', 'File not found.');
+        }
+
+        // Get stored password
+        $storedPassword = DB::table('password_file_downloads')->value('download_password');
+
+        // Check if provided password is correct
+        if (!Hash::check($request->password, $storedPassword)) {
+            return redirect()->back()->with('error', 'Incorrect password.');
+        }
 
         if (File::exists($path)) {
             // Get the file's mime type to determine how to display it
@@ -331,5 +343,4 @@ class RepositoryController extends Controller
 
         return response()->json(['message' => 'Folder uploaded successfully.']);
     }
-
 }
