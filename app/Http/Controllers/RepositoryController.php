@@ -343,4 +343,53 @@ class RepositoryController extends Controller
 
         return response()->json(['message' => 'Folder uploaded successfully.']);
     }
+
+    public function download_current_directory(Request $request, $type, $program, $subfolder = null)
+    {
+        // Get the password from the database
+        $password = DB::table('password_file_downloads')->value('download_password');
+
+        // Validate the password
+        if (!Hash::check($request->password, $password)) {
+            return redirect()->back()->with('error', 'Incorrect password. Please try again.');
+        }
+
+        // Define folder path based on user's current location
+        $folderPath = public_path("repository/$type/$program" . ($subfolder ? "/$subfolder" : ''));
+
+        if (!File::exists($folderPath)) {
+            return redirect()->back()->with('error', 'Directory not found.');
+        }
+
+        // Create a temporary ZIP file
+        $zipFileName = ($subfolder ? basename($subfolder) : 'repository') . '.zip';
+        $zipFilePath = storage_path("app/$zipFileName");
+
+        $zip = new ZipArchive;
+        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== TRUE) {
+            return redirect()->back()->with('error', 'Could not create ZIP file.');
+        }
+
+        // Create recursive directory iterator
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($folderPath, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($iterator as $file) {
+            $filePath = $file->getRealPath();
+            $relativePath = substr($filePath, strlen($folderPath) + 1);
+
+            if ($file->isDir()) {
+                $zip->addEmptyDir($relativePath);
+            } else {
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+
+        $zip->close();
+
+        // Download and delete ZIP after sending
+        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+    }
 }

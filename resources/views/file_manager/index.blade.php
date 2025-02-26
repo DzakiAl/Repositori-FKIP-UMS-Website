@@ -69,8 +69,8 @@
                 <button type="submit" class="search-button">Search</button>
             </form>
 
-            @auth
-                <div class="file-manager-option-container">
+            <div class="file-manager-option-container">
+                @auth
                     {{-- Upload File Form --}}
                     <form action="{{ route('repository.upload_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="POST" enctype="multipart/form-data" id="upload-form" style="display: none;">
                         @csrf
@@ -90,9 +90,24 @@
                         @csrf
                         <input type="text" name="folder_name" id="folder_name" class="name-folder-input" placeholder="Ketik nama folder yang ingin ditambahkan">
                         <button type="submit" class="add-folder-button">Add Folder</button>
-                    </form>                  
+                    </form>
+                @endauth
+                
+                {{-- Download all file and folder in current directory --}}
+                <a href="#" class="download-all-file-folder-button" onclick="openPasswordModal()">Download All Files & Folders</a>
+                <div id="passwordModal" class="modal-overlay">
+                    <div class="modal-content">
+                        <h3 class="modal-title">Enter Password to Download</h3>
+                        <form id="downloadForm" action="{{ route('repository.download_all', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="GET">
+                            <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
+                            <div class="modal-option">
+                                <button class="modal-button" type="submit">Download</button>
+                                <button type="button" class="modal-close-button" onclick="closeModal()">Close</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            @endauth
+            </div>
             
             <div class="breadcrumbs">
                 <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program]) }}">Root</a>
@@ -381,6 +396,15 @@
 
             // Close the modal
             closeFileModal();
+        }
+
+        // Open and close password modal for download file and folder in current directory
+        function openPasswordModal() {
+            document.getElementById('passwordModal').style.display = 'flex ';
+        }
+
+        function closeModal() {
+            document.getElementById('passwordModal').style.display = 'none';
         }
     </script>
 </body>

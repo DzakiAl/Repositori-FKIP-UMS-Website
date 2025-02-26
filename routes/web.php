@@ -16,6 +16,7 @@ Route::post('/download-folder/{type}/{program}/{subfolder?}', [RepositoryControl
 Route::get('/delete-file/{type}/{program}/{subfolder?}/{file}', [RepositoryController::class, 'delete_file'])->where('subfolder', '.*')->name('repository.delete_file');
 Route::get('/open-file/{type}/{program}/{subfolder?}/{file}', [RepositoryController::class, 'open_file'])->where('subfolder', '.*')->name('repository.open_file');
 Route::post('/rename/{type}/{program}/{subfolder?}', [RepositoryController::class, 'rename'])->where('subfolder', '.*')->name('repository.rename');
+Route::get('/repository/{type}/{program}/download-all/{subfolder?}', [RepositoryController::class, 'download_current_directory'])->where('subfolder', '.*')->name('repository.download_all');
 Route::get('/login', [AuthController::class, 'ShowLoginForm'])->name('show_login_form');
 Route::post('/login', [AuthController::class, 'Login'])->name('login');
 Route::post('/logout', [AuthController::class, 'Logout'])->name('logout');
