@@ -417,11 +417,11 @@
             document.getElementById('passwordModal').style.display = 'none';
         }
 
-        // Uploading file or folder modal pop up
+        // upload modal pop up when uploading files or folders
         document.addEventListener("DOMContentLoaded", function () {
             const fileInput = document.getElementById('file-input');
             const folderInput = document.getElementById('folder-input');
-            const popup = document.getElementById('custom-upload-popup');y
+            const popup = document.getElementById('custom-upload-popup');
 
             function showPopupAndSubmit(input) {
                 if (input.files.length > 0) {
@@ -432,7 +432,7 @@
 
             fileInput?.addEventListener('change', () => showPopupAndSubmit(fileInput));
             folderInput?.addEventListener('change', () => showPopupAndSubmit(folderInput));
-        });
+            });
     </script>
 </body>
 </html>
