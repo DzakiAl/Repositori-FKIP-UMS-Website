@@ -14,13 +14,13 @@
             <p class="popup">{{ session('success') ?? session('error') }}</p>
         </div>
     @endif
-    
+
     <!-- Custom Uploading Popup -->
     <div id="custom-upload-popup" style="display: none;">
         <div class="popup-overlay">
             <div class="popup-content">
-            <div class="spinner"></div>
-            <p>Uploading... Please wait.</p>
+                <div class="spinner"></div>
+                <p>Uploading... Please wait.</p>
             </div>
         </div>
     </div>
@@ -36,7 +36,8 @@
                     <a class="dropdown-toggle">{{ $dataType }}</a>
                     <div class="dropdown-menu">
                         @foreach ($studyPrograms as $studyProgram)
-                            <a href="{{ route('repository.file_manager', ['type' => $dataType, 'program' => basename($studyProgram)]) }}" class="dropdown-item">
+                            <a href="{{ route('repository.file_manager', ['type' => $dataType, 'program' => basename($studyProgram)]) }}"
+                                class="dropdown-item">
                                 {{ basename($studyProgram) }}
                             </a>
                         @endforeach
@@ -53,15 +54,16 @@
 
     {{-- Sidebar --}}
     <div class="sidebar" id="sidebar">
-        <a href="{{route('repository.index')}}" class="home-link">Home</a>
+        <a href="{{ route('repository.index') }}" class="home-link">Home</a>
         @foreach ($data as $dataType => $studyPrograms)
             <div class="sidebar-dropdown">
                 <p class="sidebar-toggle">{{ $dataType }}</p>
                 <div class="sidebar-dropdown-menu">
                     @foreach ($studyPrograms as $studyProgram)
-                            <a href="{{ route('repository.file_manager', ['type' => $dataType, 'program' => basename($studyProgram)]) }}" class="dropdown-item">
-                                {{ basename($studyProgram) }}
-                            </a>
+                        <a href="{{ route('repository.file_manager', ['type' => $dataType, 'program' => basename($studyProgram)]) }}"
+                            class="dropdown-item">
+                            {{ basename($studyProgram) }}
+                        </a>
                     @endforeach
                 </div>
             </div>
@@ -74,55 +76,71 @@
             <h1 class="title">Repositori {{ $type }} Prodi {{ $program }}</h1>
         </div>
         <div class="file-manager-container">
-            <form action="{{ route('repository.file_manager', ['type' => $type, 'program' => $program]) }}" method="GET" class="search-form">
-                <input type="text" class="search-input" name="search" placeholder="Cari file atau folder" value="{{ request('search') }}">
+            <form action="{{ route('repository.file_manager', ['type' => $type, 'program' => $program]) }}"
+                method="GET" class="search-form">
+                <input type="text" class="search-input" name="search" placeholder="Cari file atau folder"
+                    value="{{ request('search') }}">
                 <button type="submit" class="search-button">Search</button>
             </form>
 
             <div class="file-manager-option-container">
                 @auth
                     {{-- Upload File Form --}}
-                    <form action="{{ route('repository.upload_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="POST" enctype="multipart/form-data" id="upload-form" style="display: none;">
+                    <form
+                        action="{{ route('repository.upload_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}"
+                        method="POST" enctype="multipart/form-data" id="upload-form" style="display: none;">
                         @csrf
                         <input type="file" name="files[]" id="file-input" multiple>
-                    </form>                  
+                    </form>
                     <button id="upload-button" class="upload-button">Upload File</button>
 
                     {{-- Upload Folder Form --}}
-                    <form action="{{ route('repository.upload_folder', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="POST" enctype="multipart/form-data" id="upload-form">
+                    <form
+                        action="{{ route('repository.upload_folder', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}"
+                        method="POST" enctype="multipart/form-data" id="upload-form">
                         @csrf
-                        <input type="file" name="files[]" id="folder-input" webkitdirectory multiple style="display: none;">
-                    </form>                   
+                        <input type="file" name="files[]" id="folder-input" webkitdirectory multiple
+                            style="display: none;">
+                    </form>
                     <button id="upload-folder-button" class="upload-button">Upload Folder</button>
 
                     {{-- Add Folder Form --}}
-                    <form action="{{ route('repository.add_folder', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="POST" style="display: flex">
+                    <form
+                        action="{{ route('repository.add_folder', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}"
+                        method="POST" style="display: flex">
                         @csrf
-                        <input type="text" name="folder_name" id="folder_name" class="name-folder-input" placeholder="Ketik nama folder yang ingin ditambahkan">
+                        <input type="text" name="folder_name" id="folder_name" class="name-folder-input"
+                            placeholder="Ketik nama folder yang ingin ditambahkan">
                         <button type="submit" class="add-folder-button">Add Folder</button>
                     </form>
                 @endauth
-                
+
                 {{-- Download all file and folder in current directory --}}
-                <a href="#" class="download-all-file-folder-button" onclick="openPasswordModal()">Download All Files & Folders</a>
+                <a href="#" class="download-all-file-folder-button" onclick="openPasswordModal()">Download All
+                    Files & Folders</a>
                 <div id="passwordModal" class="modal-overlay">
                     <div class="modal-content">
                         <h3 class="modal-title">Enter Password to Download</h3>
-                        <form id="downloadForm" action="{{ route('repository.download_all', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}" method="GET">
-                            <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
+                        <form id="downloadForm"
+                            action="{{ route('repository.download_all', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}"
+                            method="GET">
+                            <input id="passwordInput" class="modal-input" type="password" name="password" required
+                                placeholder="Enter download password">
                             <div class="modal-option">
                                 <button class="modal-button" type="submit">Download</button>
-                                <button type="button" class="modal-close-button" onclick="closeModal()">Close</button>
+                                <button type="button" class="modal-close-button"
+                                    onclick="closeModal()">Close</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-            
+
             <div class="breadcrumbs">
                 <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program]) }}">Root</a>
                 @foreach ($breadcrumbs as $index => $crumb)
-                    / <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => implode('/', array_slice($breadcrumbs, 0, $index + 1))]) }}">{{ $crumb }}</a>
+                    / <a
+                        href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => implode('/', array_slice($breadcrumbs, 0, $index + 1))]) }}">{{ $crumb }}</a>
                 @endforeach
             </div>
 
@@ -144,7 +162,8 @@
                         <tr class="folder_file_container">
                             <td class="folder_file_name">
                                 <img src="{{ asset('assets/folder_icon.png') }}" class="icon">
-                                <a href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">
+                                <a
+                                    href="{{ route('repository.file_manager', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}">
                                     {{ $folder }}
                                 </a>
                             </td>
@@ -155,19 +174,25 @@
                                 <div id="passwordModal" class="modal-overlay">
                                     <div class="modal-content">
                                         <h3 class="modal-title">Enter Password to Download</h3>
-                                            <form action="{{ route('repository.download_folder', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" method="POST">
-                                                @csrf
-                                                <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
-                                                <div class="modal-option">
-                                                    <button class="modal-button" type="submit">Download</button>
-                                                    <button type="button" class="modal-close-button" onclick="closeModal()">Close</button>
-                                                </div>
-                                            </form>                                                
-                                        </div>
+                                        <form
+                                            action="{{ route('repository.download_folder', ['type' => $type, 'program' => $program, 'subfolder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}"
+                                            method="POST">
+                                            @csrf
+                                            <input id="passwordInput" class="modal-input" type="password"
+                                                name="password" required placeholder="Enter download password">
+                                            <div class="modal-option">
+                                                <button class="modal-button" type="submit">Download</button>
+                                                <button type="button" class="modal-close-button"
+                                                    onclick="closeModal()">Close</button>
+                                            </div>
+                                        </form>
                                     </div>
+                                </div>
                                 @auth
-                                    <a href="#" onclick="renameItem('{{ $folder }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
-                                    <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}" onclick="return confirm('Are you sure? (This is action cannot be undone)')">Delete</a>
+                                    <a href="#"
+                                        onclick="renameItem('{{ $folder }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
+                                    <a href="{{ route('repository.delete_folder', ['type' => $type, 'program' => $program, 'folder' => isset($subfolder) ? "$subfolder/$folder" : $folder]) }}"
+                                        onclick="return confirm('Are you sure? (This is action cannot be undone)')">Delete</a>
                                 @endauth
                             </td>
                         </tr>
@@ -183,40 +208,50 @@
                         <tr>
                             <td class="folder_file_name">
                                 <img src="{{ asset('assets/document_icon.png') }}" class="icon">
-                                <a href="#" class="file-folder-name" onclick="showFilePasswordModal('{{ route('repository.open_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}')">
+                                <a href="#" class="file-folder-name"
+                                    onclick="showFilePasswordModal('{{ route('repository.open_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}')">
                                     {{ $file['name'] }}
                                 </a>
-                                
+
                                 <div id="filePasswordModal" class="file-modal-overlay">
                                     <div class="file-modal-content">
                                         <h3 class="file-modal-title">Enter Password to View File</h3>
-                                        <input id="filePasswordInput" class="file-modal-input" type="password" required placeholder="Enter file password">
+                                        <input id="filePasswordInput" class="file-modal-input" type="password"
+                                            required placeholder="Enter file password">
                                         <div class="file-modal-option">
-                                            <button class="file-modal-button" onclick="submitFilePassword()">View File</button>
-                                            <button type="button" class="file-modal-close-button" onclick="closeFileModal()">Close</button>
+                                            <button class="file-modal-button" onclick="submitFilePassword()">View
+                                                File</button>
+                                            <button type="button" class="file-modal-close-button"
+                                                onclick="closeFileModal()">Close</button>
                                         </div>
                                     </div>
-                                </div>                                                             
+                                </div>
                             </td>
                             <td>{{ $file['modified'] }}</td>
                             <td>{{ number_format($file['size'] / 1024, 2) }} KB</td>
                             <td class="options">
                                 <a href="#" class="download-file">Download</a>
-                                    <div id="passwordModal" class="modal-overlay">
-                                        <div class="modal-content">
-                                            <h3 class="modal-title">Enter Password to Download</h3>
-                                            <form action="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" method="GET">
-                                                <input id="passwordInput" class="modal-input" type="password" name="password" required placeholder="Enter download password">
-                                                <div class="modal-option">
-                                                    <button class="modal-button" type="submit">Download</button>
-                                                    <button type="button" class="modal-close-button" onclick="closeModal()">Close</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                <div id="passwordModal" class="modal-overlay">
+                                    <div class="modal-content">
+                                        <h3 class="modal-title">Enter Password to Download</h3>
+                                        <form
+                                            action="{{ route('repository.download_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}"
+                                            method="GET">
+                                            <input id="passwordInput" class="modal-input" type="password"
+                                                name="password" required placeholder="Enter download password">
+                                            <div class="modal-option">
+                                                <button class="modal-button" type="submit">Download</button>
+                                                <button type="button" class="modal-close-button"
+                                                    onclick="closeModal()">Close</button>
+                                            </div>
+                                        </form>
                                     </div>
+                                </div>
                                 @auth
-                                    <a href="#" onclick="renameItem('{{ $file['name'] }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
-                                    <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}" onclick="return confirm('Are you sure? (This is action cannot be undone)')">Delete</a>
+                                    <a href="#"
+                                        onclick="renameItem('{{ $file['name'] }}', '{{ route('repository.rename', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder]) }}')">Rename</a>
+                                    <a href="{{ route('repository.delete_file', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder, 'file' => $file['name']]) }}"
+                                        onclick="return confirm('Are you sure? (This is action cannot be undone)')">Delete</a>
                                 @endauth
                             </td>
                         </tr>
@@ -232,81 +267,174 @@
 
     {{-- JavaScript --}}
     <script>
-        // Upload Files
         document.addEventListener("DOMContentLoaded", function() {
-            let uploadButton = document.getElementById('upload-button');
-            let fileInput = document.getElementById('file-input');
+            // === Upload File ===
+            const uploadButton = document.getElementById('upload-button');
+            const fileInput = document.getElementById('file-input');
+            const uploadForm = document.getElementById('upload-form');
 
-            if (uploadButton && fileInput) {
-                uploadButton.addEventListener('click', function() {
-                    fileInput.click();
-                });
+            if (uploadButton && fileInput && uploadForm) {
+                uploadButton.addEventListener('click', () => fileInput.click());
 
-                fileInput.addEventListener('change', function() {
-                    if (this.files.length > 0) {
-                        document.getElementById('upload-form').submit();
+                fileInput.addEventListener('change', () => {
+                    if (fileInput.files.length > 0) {
+                        document.getElementById('custom-upload-popup').style.display = "block";
+                        uploadForm.submit(); // Regular form submit for file upload
                     }
                 });
             }
-        });
 
-        // Close popup after a few seconds
-        setTimeout(() => {
-            const popup = document.getElementsByClassName('popup-container')[0];
-            if (popup) {
-                popup.style.display = 'none';
+            // === Upload Folder ===
+            const uploadFolderButton = document.getElementById('upload-folder-button');
+            const folderInput = document.getElementById('folder-input');
+
+            if (uploadFolderButton && folderInput) {
+                uploadFolderButton.addEventListener('click', () => folderInput.click());
+
+                folderInput.addEventListener('change', function(event) {
+                    if (folderInput.files.length > 0) {
+                        document.getElementById('custom-upload-popup').style.display = "block";
+
+                        let formData = new FormData();
+                        for (let file of event.target.files) {
+                            formData.append('files[]', file);
+                            formData.append('paths[]', file.webkitRelativePath); // Keep relative path
+                        }
+
+                        fetch("{{ route('repository.upload_folder', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}", {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                document.getElementById('custom-upload-popup').style.display = 'none';
+
+                                if (!data.error) {
+                                    // Show success popup
+                                    const successPopup = document.createElement('div');
+                                    successPopup.className = 'popup-container';
+                                    successPopup.style.position = 'fixed';
+                                    successPopup.style.top = '20px';
+                                    successPopup.style.right = '20px';
+                                    successPopup.style.padding = '10px 20px';
+                                    successPopup.style.backgroundColor = '#4caf50';
+                                    successPopup.style.color = 'white';
+                                    successPopup.style.borderRadius = '8px';
+                                    successPopup.style.zIndex = '1000';
+                                    successPopup.innerText = 'Folder uploaded successfully.';
+
+                                    document.body.appendChild(successPopup);
+
+                                    // Wait 2 seconds before removing popup and reloading
+                                    setTimeout(() => {
+                                        successPopup.remove();
+                                        location.reload();
+                                    }, 2000);
+
+                                } else {
+                                    // Show error popup
+                                    const errorPopup = document.createElement('div');
+                                    errorPopup.className = 'popup-container';
+                                    errorPopup.style.position = 'fixed';
+                                    errorPopup.style.top = '20px';
+                                    errorPopup.style.right = '20px';
+                                    errorPopup.style.padding = '10px 20px';
+                                    errorPopup.style.backgroundColor = '#f44336'; // red
+                                    errorPopup.style.color = 'white';
+                                    errorPopup.style.borderRadius = '8px';
+                                    errorPopup.style.zIndex = '1000';
+                                    errorPopup.innerText = 'Something went wrong.';
+
+                                    document.body.appendChild(errorPopup);
+
+                                    // Remove error popup after 3 seconds
+                                    setTimeout(() => {
+                                        errorPopup.remove();
+                                        location.reload();
+                                    }, 3000);
+                                }
+                            })
+                            .catch(error => {
+                                document.getElementById('custom-upload-popup').style.display = 'none';
+                                console.error('Upload error:', error);
+
+                                // Show error popup for network or other errors
+                                const errorPopup = document.createElement('div');
+                                errorPopup.className = 'popup-container';
+                                errorPopup.style.position = 'fixed';
+                                errorPopup.style.top = '20px';
+                                errorPopup.style.right = '20px';
+                                errorPopup.style.padding = '10px 20px';
+                                errorPopup.style.backgroundColor = '#f44336'; // red
+                                errorPopup.style.color = 'white';
+                                errorPopup.style.borderRadius = '8px';
+                                errorPopup.style.zIndex = '1000';
+                                errorPopup.innerText = 'Something went wrong.';
+
+                                document.body.appendChild(errorPopup);
+
+                                setTimeout(() => {
+                                    errorPopup.remove();
+                                    location.reload();
+                                }, 3000);
+                            });
+
+                    }
+                });
             }
-        }, 3000);
 
-        // Download JS function for showing enter password to download modal
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll('.download-file').forEach(function (button) {
-                button.addEventListener('click', function (e) {
+            // === Auto Close Any Flash Popup After 3s ===
+            setTimeout(() => {
+                const popup = document.querySelector('.popup-container');
+                if (popup) popup.style.display = 'none';
+            }, 3000);
+
+            // === Download with Password Modal ===
+            document.querySelectorAll('.download-file').forEach(button => {
+                button.addEventListener('click', function(e) {
                     e.preventDefault();
-
-                    // Find the closest modal related to this button
-                    let modal = this.closest('tr').querySelector('.modal-overlay');
-                    if (modal) {
-                        modal.style.display = 'flex';
-                    }
+                    const modal = this.closest('tr').querySelector('.modal-overlay');
+                    if (modal) modal.style.display = 'flex';
                 });
             });
 
-            // Download JS function when close modal clear password field
-            document.querySelectorAll('.modal-close-button').forEach(function (closeButton) {
-                closeButton.addEventListener('click', function () {
-                    let modal = this.closest('.modal-overlay');
+            // === Close Download Modal ===
+            document.querySelectorAll('.modal-close-button').forEach(closeBtn => {
+                closeBtn.addEventListener('click', function() {
+                    const modal = this.closest('.modal-overlay');
                     if (modal) {
                         modal.style.display = 'none';
-                        modal.querySelector('.modal-input').value = ''; // Clear input field
+                        modal.querySelector('.modal-input').value = '';
                     }
                 });
             });
 
-            window.addEventListener('click', function (e) {
-                document.querySelectorAll('.modal-overlay').forEach(function (modal) {
+            window.addEventListener('click', function(e) {
+                document.querySelectorAll('.modal-overlay').forEach(modal => {
                     if (e.target === modal) {
                         modal.style.display = 'none';
-                        modal.querySelector('.modal-input').value = ''; // Clear input field
+                        modal.querySelector('.modal-input').value = '';
                     }
+                });
+            });
+
+            // === Toggle Sidebar ===
+            document.querySelectorAll('.sidebar-toggle').forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const dropdown = toggle.nextElementSibling;
+                    if (dropdown) dropdown.classList.toggle('show');
                 });
             });
         });
 
-        // Toggle sidebar
-            function toggleSidebar() {
+        function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
         }
 
-        // Toggle dropdowns in sidebar
-        document.querySelectorAll('.sidebar-toggle').forEach(toggle => {
-            toggle.addEventListener('click', () => {
-                let dropdownMenu = toggle.nextElementSibling;
-                dropdownMenu.classList.toggle('show');
-            });
-        });
-
-        // Rename folder and file logic
+        // === Rename Item ===
         function renameItem(oldName, renameUrl) {
             const newName = prompt("Enter the new name:", oldName);
             if (newName && newName !== oldName) {
@@ -314,125 +442,50 @@
                 form.method = 'POST';
                 form.action = renameUrl;
 
-                const csrfToken = document.createElement('input');
-                csrfToken.type = 'hidden';
-                csrfToken.name = '_token';
-                csrfToken.value = '{{ csrf_token() }}';
-
-                const oldNameInput = document.createElement('input');
-                oldNameInput.type = 'hidden';
-                oldNameInput.name = 'old_name';
-                oldNameInput.value = oldName;
-
-                const newNameInput = document.createElement('input');
-                newNameInput.type = 'hidden';
-                newNameInput.name = 'new_name';
-                newNameInput.value = newName;
-
-                form.appendChild(csrfToken);
-                form.appendChild(oldNameInput);
-                form.appendChild(newNameInput);
+                form.innerHTML = `
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="old_name" value="${oldName}">
+                    <input type="hidden" name="new_name" value="${newName}">
+                `;
 
                 document.body.appendChild(form);
                 form.submit();
             }
         }
 
-        // Upload folder button
-        document.getElementById('upload-folder-button').addEventListener('click', function() {
-            document.getElementById('folder-input').click();
-        });
-
-        // Upload folder logic
-        document.getElementById('folder-input').addEventListener('change', function(event) {
-            let formData = new FormData();
-            
-            for (let file of event.target.files) {
-                formData.append('files[]', file);
-                formData.append('paths[]', file.webkitRelativePath); // Send full relative path
-            }
-
-            fetch("{{ route('repository.upload_folder', ['type' => $type, 'program' => $program, 'subfolder' => $subfolder ?? '']) }}", {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                }
-            }).then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error); // Show error if folder exists
-                } else {
-                    alert(data.message);
-                    location.reload();
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-
-        // Insert password first to view file JS function
+        // === File View Modal with Password ===
         function showFilePasswordModal(fileUrl) {
-            window.fileUrl = fileUrl; // Store file URL for later use
+            window.fileUrl = fileUrl;
             document.getElementById('filePasswordModal').style.display = 'flex';
         }
 
         function closeFileModal() {
-            let modal = document.getElementById('filePasswordModal');
-            let passwordInput = document.getElementById('filePasswordInput');
-
-            // Hide the modal
-            modal.style.display = "none";
-
-            // Clear the password field
-            passwordInput.value = "";
+            document.getElementById('filePasswordModal').style.display = 'none';
+            document.getElementById('filePasswordInput').value = '';
         }
 
         function submitFilePassword() {
-            let passwordInput = document.getElementById('filePasswordInput');
-            let password = passwordInput.value.trim();
+            const input = document.getElementById('filePasswordInput');
+            const password = input.value.trim();
 
-            if (password === "") {
+            if (!password) {
                 alert("Please enter a password");
                 return;
             }
-            
-            let url = window.fileUrl + "?password=" + encodeURIComponent(password);
-            
-            // Open the file in a new tab
-            window.open(url, '_blank');
 
-            // Clear the password field
-            passwordInput.value = "";
-
-            // Close the modal
+            const finalUrl = `${window.fileUrl}?password=${encodeURIComponent(password)}`;
+            window.open(finalUrl, '_blank');
             closeFileModal();
         }
 
-        // Open and close password modal for download file and folder in current directory
+        // === Modal for Downloading Folders with Password ===
         function openPasswordModal() {
-            document.getElementById('passwordModal').style.display = 'flex ';
+            document.getElementById('passwordModal').style.display = 'flex';
         }
 
         function closeModal() {
             document.getElementById('passwordModal').style.display = 'none';
         }
-
-        // upload modal pop up when uploading files or folders
-        document.addEventListener("DOMContentLoaded", function () {
-            const fileInput = document.getElementById('file-input');
-            const folderInput = document.getElementById('folder-input');
-            const popup = document.getElementById('custom-upload-popup');
-
-            function showPopupAndSubmit(input) {
-                if (input.files.length > 0) {
-                popup.style.display = "block";
-                input.closest('form').submit();
-                }
-            }
-
-            fileInput?.addEventListener('change', () => showPopupAndSubmit(fileInput));
-            folderInput?.addEventListener('change', () => showPopupAndSubmit(folderInput));
-            });
     </script>
 </body>
 </html>
