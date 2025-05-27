@@ -10,7 +10,7 @@ body {
         display: flex;
         justify-content: center;
     }
-    
+
     .popup {
         display: block;
         padding: 15px;
@@ -22,7 +22,7 @@ body {
         position: absolute;
         z-index: 2;
     }
-    
+
     .title-container {
         display: flex;
         align-items: center;
@@ -30,22 +30,22 @@ body {
         height: 70px;
         background-color: #1CBDB3;
     }
-    
+
     .title {
         font-size: 25px;
         margin: 0 0 0 20px;
         color: white;
         font-weight: normal;
     }
-    
+
     .file-manager-container {
         margin: 20px 50px 20px 50px;
     }
-    
+
     .search-form {
         margin: 0 0 10px 0;
     }
-    
+
     .search-input {
         width: 700px;
         font-size: 15px;
@@ -53,7 +53,7 @@ body {
         border: none;
         border-bottom: 2.5px solid #2F3185;
     }
-    
+
     .search-button {
         width: 120px;
         height: 30px;
@@ -63,25 +63,25 @@ body {
         color: #2F3185;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .search-button:hover {
         background-color: #ce9402;
         color: #141665;
         transition: all ease-in-out 0.25s;
         cursor: pointer;
     }
-    
+
     .file-manager-option-container {
         display: flex;
         align-items: center;
         height: 30px;
     }
-    
+
     .name-folder-input {
         width: 250px;
         margin-right: 5px;
     }
-    
+
     .upload-button {
         display: block;
         width: 130px;
@@ -96,7 +96,7 @@ body {
         cursor: pointer;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .add-folder-button {
         display: block;
         width: 130px;
@@ -111,45 +111,45 @@ body {
         border: none;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .upload-button:hover {
         background-color: #ce9402;
         color: #141665;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .add-folder-button:hover {
         background-color: #ce9402;
         color: #141665;
         cursor: pointer;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .file-folder-list-container {
         width: 100%;
         margin: 15px 0 0 0;
     }
-    
+
     .file-folder-list-container tr th {
         text-align: left;
         font-weight: normal;
     }
-    
+
     .separator-row td {
         border-top: 2.5px solid #2F3185;
     }
-    
+
     .folder_file_name {
         display: flex;
         align-items: center;
     }
-    
+
     .icon {
         width: 25px;
         height: auto;
         margin-right: 10px;
     }
-    
+
     .modal-overlay {
         display: none;
         justify-content: center;
@@ -161,7 +161,7 @@ body {
         height: 100%;
         background: rgba(0, 0, 0, 0.6);
     }
-    
+
     .modal-content {
         display: flex;
         justify-content: center;
@@ -173,22 +173,22 @@ body {
         height: 200px;
         text-align: center;
     }
-    
+
     .modal-title {
         color: white;
         margin: 5px 0 15px 0;
     }
-    
+
     .modal-input {
         border: none;
         width: 300px;
         padding: 5px 15px 5px 15px;
     }
-    
+
     .modal-option {
         margin: 15px 0 0 0;
     }
-    
+
     .modal-button {
         background-color: #FFB800;
         color: #2F3185;
@@ -197,13 +197,13 @@ body {
         height: 30px;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .modal-button:hover {
         background-color: #ce9402;
         color: #141665;
         cursor: pointer;
     }
-    
+
     .modal-close-button {
         background-color: red;
         color: white;
@@ -212,7 +212,7 @@ body {
         height: 30px;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .modal-close-button:hover {
         background-color: rgb(185, 2, 2);
         color: rgb(184, 184, 184);
@@ -234,7 +234,7 @@ body {
         height: 100%;
         background: rgba(0, 0, 0, 0.6);
     }
-    
+
     .file-modal-content {
         display: flex;
         justify-content: center;
@@ -246,22 +246,22 @@ body {
         height: 200px;
         text-align: center;
     }
-    
+
     .file-modal-title {
         color: white;
         margin: 5px 0 15px 0;
     }
-    
+
     .file-modal-input {
         border: none;
         width: 300px;
         padding: 5px 15px 5px 15px;
     }
-    
+
     .file-modal-option {
         margin: 15px 0 0 0;
     }
-    
+
     .file-modal-button {
         background-color: #FFB800;
         color: #2F3185;
@@ -270,13 +270,13 @@ body {
         height: 30px;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .file-modal-button:hover {
         background-color: #ce9402;
         color: #141665;
         cursor: pointer;
     }
-    
+
     .file-modal-close-button {
         background-color: red;
         color: white;
@@ -285,7 +285,7 @@ body {
         height: 30px;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .file-modal-close-button:hover {
         background-color: rgb(185, 2, 2);
         color: rgb(184, 184, 184);
@@ -309,6 +309,47 @@ body {
         color: #141665;
         transition: all ease-in-out 0.25s;
     }
+
+    #custom-upload-popup .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    #custom-upload-popup .popup-content {
+        background: #fff;
+        padding: 20px 30px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 10px;
+        border: 5px solid #ccc;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 }
 
 /* tablet screen */
@@ -317,7 +358,7 @@ body {
         display: flex;
         justify-content: center;
     }
-    
+
     .popup {
         display: block;
         padding: 15px;
@@ -329,7 +370,7 @@ body {
         position: absolute;
         z-index: 2;
     }
-    
+
     .title-container {
         display: flex;
         align-items: center;
@@ -337,22 +378,22 @@ body {
         height: 50px;
         background-color: #1CBDB3;
     }
-    
+
     .title {
         font-size: 15px;
         margin: 0 0 0 10px;
         color: white;
         font-weight: normal;
     }
-    
+
     .file-manager-container {
         margin: 10px;
     }
-    
+
     .search-form {
         margin: 0 0 10px 0;
     }
-    
+
     .search-input {
         width: 60%;
         font-size: 15px;
@@ -360,7 +401,7 @@ body {
         border: none;
         border-bottom: 2.5px solid #2F3185;
     }
-    
+
     .search-button {
         width: 90px;
         height: 25px;
@@ -371,18 +412,18 @@ body {
         transition: all ease-in-out 0.25s;
         margin: 0 0 0 5px;
     }
-    
+
     .file-manager-option-container {
         display: flex;
         align-items: center;
         height: 30px;
     }
-    
+
     .name-folder-input {
         width: 175px;
         margin-right: 5px;
     }
-    
+
     .upload-button {
         display: block;
         width: 125px;
@@ -397,7 +438,7 @@ body {
         cursor: pointer;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .add-folder-button {
         display: block;
         width: 100px;
@@ -411,28 +452,28 @@ body {
         border: none;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .file-folder-list-container {
         width: 100%;
         margin: 15px 0 0 0;
     }
-    
+
     .file-folder-list-container tr th {
         text-align: left;
         font-weight: normal;
         font-size: 15px;
     }
-    
+
     .separator-row td {
         border-top: 2.5px solid #2F3185;
     }
-    
+
     .folder_file_name {
         display: flex;
         align-items: center;
         font-size: 15px;
     }
-    
+
     .icon {
         width: 25px;
         height: auto;
@@ -442,11 +483,11 @@ body {
     .info-file-folder {
         font-size: 15px;
     }
-    
+
     .options {
         width: 50px;
     }
-    
+
     .modal-overlay {
         display: none;
         justify-content: center;
@@ -458,7 +499,7 @@ body {
         height: 100%;
         background: rgba(0, 0, 0, 0.6);
     }
-    
+
     .modal-content {
         display: flex;
         justify-content: center;
@@ -470,22 +511,22 @@ body {
         height: 200px;
         text-align: center;
     }
-    
+
     .modal-title {
         color: white;
         margin: 5px 0 15px 0;
     }
-    
+
     .modal-input {
         border: none;
         width: 300px;
         padding: 5px 15px 5px 15px;
     }
-    
+
     .modal-option {
         margin: 15px 0 0 0;
     }
-    
+
     .modal-button {
         background-color: #FFB800;
         color: #2F3185;
@@ -494,7 +535,7 @@ body {
         height: 30px;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .modal-close-button {
         background-color: red;
         color: white;
@@ -519,7 +560,7 @@ body {
         height: 100%;
         background: rgba(0, 0, 0, 0.6);
     }
-    
+
     .file-modal-content {
         display: flex;
         justify-content: center;
@@ -531,22 +572,22 @@ body {
         height: 200px;
         text-align: center;
     }
-    
+
     .file-modal-title {
         color: white;
         margin: 5px 0 15px 0;
     }
-    
+
     .file-modal-input {
         border: none;
         width: 300px;
         padding: 5px 15px 5px 15px;
     }
-    
+
     .file-modal-option {
         margin: 15px 0 0 0;
     }
-    
+
     .file-modal-button {
         background-color: #FFB800;
         color: #2F3185;
@@ -555,7 +596,7 @@ body {
         height: 30px;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .file-modal-close-button {
         background-color: red;
         color: white;
@@ -576,6 +617,47 @@ body {
         text-decoration: none;
         text-align: center;
     }
+
+    #custom-upload-popup .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    #custom-upload-popup .popup-content {
+        background: #fff;
+        padding: 20px 30px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 10px;
+        border: 5px solid #ccc;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 }
 
 /* phone screen */
@@ -584,7 +666,7 @@ body {
         display: flex;
         justify-content: center;
     }
-    
+
     .popup {
         display: block;
         padding: 15px;
@@ -596,7 +678,7 @@ body {
         position: absolute;
         z-index: 2;
     }
-    
+
     .title-container {
         display: flex;
         align-items: center;
@@ -604,22 +686,22 @@ body {
         height: 50px;
         background-color: #1CBDB3;
     }
-    
+
     .title {
         font-size: 15px;
         margin: 0 0 0 10px;
         color: white;
         font-weight: normal;
     }
-    
+
     .file-manager-container {
         margin: 5px;
     }
-    
+
     .search-form {
         margin: 0 0 10px 0;
     }
-    
+
     .search-input {
         width: 60%;
         font-size: 15px;
@@ -627,7 +709,7 @@ body {
         border: none;
         border-bottom: 2.5px solid #2F3185;
     }
-    
+
     .search-button {
         width: 80px;
         height: 25px;
@@ -638,18 +720,18 @@ body {
         transition: all ease-in-out 0.25s;
         margin: 0 0 0 5px;
     }
-    
+
     .file-manager-option-container {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
     }
-    
+
     .name-folder-input {
         width: 80px;
         margin-right: 5px;
     }
-    
+
     .upload-button {
         display: block;
         width: 80px;
@@ -664,7 +746,7 @@ body {
         cursor: pointer;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .add-folder-button {
         display: block;
         width: 70px;
@@ -679,22 +761,22 @@ body {
         border: none;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .file-folder-list-container {
         width: 100%;
         margin: 15px 0 0 0;
     }
-    
+
     .file-folder-list-container tr th {
         text-align: left;
         font-weight: normal;
         font-size: 12.5px;
     }
-    
+
     .separator-row td {
         border-top: 2.5px solid #2F3185;
     }
-    
+
     .folder_file_name {
         display: flex;
         align-items: center;
@@ -704,7 +786,7 @@ body {
     .file-folder-list-container tr td {
         font-size: 12.5px;
     }
-    
+
     .icon {
         width: 15px;
         height: auto;
@@ -718,7 +800,7 @@ body {
     .options {
         font-size: 12.5px;
     }
-    
+
     .modal-overlay {
         display: none;
         justify-content: center;
@@ -730,7 +812,7 @@ body {
         height: 100%;
         background: rgba(0, 0, 0, 0.6);
     }
-    
+
     .modal-content {
         display: flex;
         justify-content: center;
@@ -742,22 +824,22 @@ body {
         height: 200px;
         text-align: center;
     }
-    
+
     .modal-title {
         color: white;
         margin: 5px 0 15px 0;
     }
-    
+
     .modal-input {
         border: none;
         width: 300px;
         padding: 5px 15px 5px 15px;
     }
-    
+
     .modal-option {
         margin: 15px 0 0 0;
     }
-    
+
     .modal-button {
         background-color: #FFB800;
         color: #2F3185;
@@ -766,7 +848,7 @@ body {
         height: 30px;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .modal-close-button {
         background-color: red;
         color: white;
@@ -792,7 +874,7 @@ body {
         height: 100%;
         background: rgba(0, 0, 0, 0.6);
     }
-    
+
     .file-modal-content {
         display: flex;
         justify-content: center;
@@ -804,22 +886,22 @@ body {
         height: 200px;
         text-align: center;
     }
-    
+
     .file-modal-title {
         color: white;
         margin: 5px 0 15px 0;
     }
-    
+
     .file-modal-input {
         border: none;
         width: 300px;
         padding: 5px 15px 5px 15px;
     }
-    
+
     .file-modal-option {
         margin: 15px 0 0 0;
     }
-    
+
     .file-modal-button {
         background-color: #FFB800;
         color: #2F3185;
@@ -828,7 +910,7 @@ body {
         height: 30px;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .file-modal-close-button {
         background-color: red;
         color: white;
@@ -837,7 +919,7 @@ body {
         height: 30px;
         transition: all ease-in-out 0.25s;
     }
-    
+
     .download-all-file-folder-button {
         width: 150px;
         height: 25px;
@@ -850,5 +932,46 @@ body {
         border: none;
         cursor: pointer;
         transition: all ease-in-out 0.25s;
+    }
+    
+    #custom-upload-popup .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    #custom-upload-popup .popup-content {
+        background: #fff;
+        padding: 20px 30px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 10px;
+        border: 5px solid #ccc;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 }

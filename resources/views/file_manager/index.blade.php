@@ -14,6 +14,16 @@
             <p class="popup">{{ session('success') ?? session('error') }}</p>
         </div>
     @endif
+    
+    <!-- Custom Uploading Popup -->
+    <div id="custom-upload-popup" style="display: none;">
+        <div class="popup-overlay">
+            <div class="popup-content">
+            <div class="spinner"></div>
+            <p>Uploading... Please wait.</p>
+            </div>
+        </div>
+    </div>
 
     {{-- Navbar --}}
     @vite(['resources/css/navbar.css', 'resources/js/app.js'])
@@ -406,6 +416,23 @@
         function closeModal() {
             document.getElementById('passwordModal').style.display = 'none';
         }
+
+        // Uploading file or folder modal pop up
+        document.addEventListener("DOMContentLoaded", function () {
+            const fileInput = document.getElementById('file-input');
+            const folderInput = document.getElementById('folder-input');
+            const popup = document.getElementById('custom-upload-popup');y
+
+            function showPopupAndSubmit(input) {
+                if (input.files.length > 0) {
+                popup.style.display = "block";
+                input.closest('form').submit();
+                }
+            }
+
+            fileInput?.addEventListener('change', () => showPopupAndSubmit(fileInput));
+            folderInput?.addEventListener('change', () => showPopupAndSubmit(folderInput));
+        });
     </script>
 </body>
 </html>
