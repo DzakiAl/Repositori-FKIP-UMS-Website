@@ -148,10 +148,6 @@
                     dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
                 });
             });
-
-            document.addEventListener("click", function() {
-                document.querySelectorAll(".dropdown-menu").forEach(menu => menu.style.display = "none");
-            });
         });
     </script>
 </body>
